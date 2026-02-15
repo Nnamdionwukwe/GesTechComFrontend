@@ -17,7 +17,8 @@ import {
 import styles from "./AgencyHomePage.module.css";
 import { Link } from "react-router-dom";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+// ✅ FIXED: Changed default port from 5001 to 5000
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const AgencyHomePage = () => {
   const [services, setServices] = useState([]);
