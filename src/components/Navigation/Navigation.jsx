@@ -5,7 +5,6 @@ import styles from "./Navigation.module.css";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const [theme, setTheme] = useState("light");
   const [activeDropdown, setActiveDropdown] = useState(null);
   const location = useLocation();
@@ -14,15 +13,6 @@ const Navigation = () => {
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
     document.documentElement.setAttribute("data-theme", savedTheme);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleTheme = () => {
@@ -38,7 +28,7 @@ const Navigation = () => {
       label: "Services",
       dropdown: [
         {
-          path: "/services/custom-software-development",
+          path: "/services/software-development",
           label: "Software Development",
         },
         { path: "/services/mobile-app-development", label: "Mobile Apps" },
@@ -53,13 +43,12 @@ const Navigation = () => {
     { path: "/blog", label: "Blog" },
     { path: "/contact", label: "Contact" },
     { path: "/login", label: "Login" },
-    // { path: "/fileupload", label: "File Upload" },
   ];
 
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className={`${styles.nav} ${isScrolled ? styles.scrolled : ""}`}>
+    <nav className={styles.nav}>
       <div className={styles.container}>
         {/* Logo */}
         <Link to="/" className={styles.logo}>
