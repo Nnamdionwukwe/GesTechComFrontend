@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Share2, 
+import React, { useState, useEffect } from "react";
+import {
+  Share2,
   TrendingUp,
   Heart,
   MessageCircle,
@@ -20,19 +20,19 @@ import {
   Twitter,
   Linkedin,
   Youtube,
-  ThumbsUp
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
-import styles from './SocialMediaManagement.module.css';
+  ThumbsUp,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import styles from "./SocialMediaManagement.module.css";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
 const SocialMediaManagement = () => {
-  const [activePlatform, setActivePlatform] = useState('all');
+  const [activePlatform, setActivePlatform] = useState("all");
   const [stats, setStats] = useState(null);
   const [projects, setProjects] = useState([]);
 
-  useEffect() => {
+  useEffect(() => {
     fetchServiceData();
   }, []);
 
@@ -40,7 +40,9 @@ const SocialMediaManagement = () => {
     try {
       const [serviceRes, projectsRes] = await Promise.all([
         fetch(`${API_URL}/api/agency/services/social-media-management`),
-        fetch(`${API_URL}/api/agency/portfolio?service=social-media-management&limit=4`)
+        fetch(
+          `${API_URL}/api/agency/portfolio?service=social-media-management&limit=4`,
+        ),
       ]);
 
       const serviceData = await serviceRes.json();
@@ -49,115 +51,164 @@ const SocialMediaManagement = () => {
       setStats(serviceData.service);
       setProjects(projectsData.projects || []);
     } catch (error) {
-      console.error('Failed to fetch service data:', error);
+      console.error("Failed to fetch service data:", error);
     }
   };
 
   const platforms = [
-    { id: 'all', name: 'All Platforms', icon: Share2, color: '#6366F1' },
-    { id: 'instagram', name: 'Instagram', icon: Instagram, color: '#E1306C' },
-    { id: 'facebook', name: 'Facebook', icon: Facebook, color: '#1877F2' },
-    { id: 'twitter', name: 'Twitter/X', icon: Twitter, color: '#1DA1F2' },
-    { id: 'linkedin', name: 'LinkedIn', icon: Linkedin, color: '#0A66C2' },
-    { id: 'youtube', name: 'YouTube', icon: Youtube, color: '#FF0000' }
+    { id: "all", name: "All Platforms", icon: Share2, color: "#6366F1" },
+    { id: "instagram", name: "Instagram", icon: Instagram, color: "#E1306C" },
+    { id: "facebook", name: "Facebook", icon: Facebook, color: "#1877F2" },
+    { id: "twitter", name: "Twitter/X", icon: Twitter, color: "#1DA1F2" },
+    { id: "linkedin", name: "LinkedIn", icon: Linkedin, color: "#0A66C2" },
+    { id: "youtube", name: "YouTube", icon: Youtube, color: "#FF0000" },
   ];
 
   const services = [
     {
       icon: Calendar,
-      title: 'Content Planning',
-      description: 'Strategic content calendars aligned with your goals',
-      features: ['Monthly Planning', 'Content Strategy', 'Posting Schedule', 'Holiday Campaigns']
+      title: "Content Planning",
+      description: "Strategic content calendars aligned with your goals",
+      features: [
+        "Monthly Planning",
+        "Content Strategy",
+        "Posting Schedule",
+        "Holiday Campaigns",
+      ],
     },
     {
       icon: Camera,
-      title: 'Content Creation',
-      description: 'Eye-catching posts, stories, and videos',
-      features: ['Graphics Design', 'Video Editing', 'Copywriting', 'Photography']
+      title: "Content Creation",
+      description: "Eye-catching posts, stories, and videos",
+      features: [
+        "Graphics Design",
+        "Video Editing",
+        "Copywriting",
+        "Photography",
+      ],
     },
     {
       icon: Users,
-      title: 'Community Management',
-      description: 'Engage with your audience and build relationships',
-      features: ['Reply Management', 'DM Responses', 'Comment Moderation', 'Crisis Management']
+      title: "Community Management",
+      description: "Engage with your audience and build relationships",
+      features: [
+        "Reply Management",
+        "DM Responses",
+        "Comment Moderation",
+        "Crisis Management",
+      ],
     },
     {
       icon: BarChart,
-      title: 'Analytics & Reporting',
-      description: 'Data-driven insights to optimize performance',
-      features: ['Performance Metrics', 'Audience Insights', 'Competitor Analysis', 'ROI Tracking']
+      title: "Analytics & Reporting",
+      description: "Data-driven insights to optimize performance",
+      features: [
+        "Performance Metrics",
+        "Audience Insights",
+        "Competitor Analysis",
+        "ROI Tracking",
+      ],
     },
     {
       icon: Target,
-      title: 'Paid Advertising',
-      description: 'Targeted ads to reach your ideal audience',
-      features: ['Ad Campaigns', 'Audience Targeting', 'A/B Testing', 'Budget Optimization']
+      title: "Paid Advertising",
+      description: "Targeted ads to reach your ideal audience",
+      features: [
+        "Ad Campaigns",
+        "Audience Targeting",
+        "A/B Testing",
+        "Budget Optimization",
+      ],
     },
     {
       icon: TrendingUp,
-      title: 'Growth Strategy',
-      description: 'Proven tactics to grow your following',
-      features: ['Follower Growth', 'Engagement Rate', 'Brand Awareness', 'Lead Generation']
-    }
+      title: "Growth Strategy",
+      description: "Proven tactics to grow your following",
+      features: [
+        "Follower Growth",
+        "Engagement Rate",
+        "Brand Awareness",
+        "Lead Generation",
+      ],
+    },
   ];
 
   const results = [
-    { metric: '500%', label: 'Avg. Follower Growth' },
-    { metric: '8x', label: 'Engagement Increase' },
-    { metric: '2M+', label: 'Impressions Generated' },
-    { metric: '95%', label: 'Client Satisfaction' }
+    { metric: "500%", label: "Avg. Follower Growth" },
+    { metric: "8x", label: "Engagement Increase" },
+    { metric: "2M+", label: "Impressions Generated" },
+    { metric: "95%", label: "Client Satisfaction" },
   ];
 
   const contentTypes = [
-    { icon: '📸', name: 'Photo Posts', description: 'High-quality images' },
-    { icon: '🎬', name: 'Video Content', description: 'Engaging videos & reels' },
-    { icon: '📝', name: 'Text Posts', description: 'Compelling copy' },
-    { icon: '📊', name: 'Infographics', description: 'Data visualization' },
-    { icon: '🎨', name: 'Carousel Posts', description: 'Multi-image stories' },
-    { icon: '🎯', name: 'Stories', description: 'Ephemeral content' },
-    { icon: '🎙️', name: 'Live Sessions', description: 'Real-time engagement' },
-    { icon: '💬', name: 'User-Generated', description: 'Community content' }
+    { icon: "📸", name: "Photo Posts", description: "High-quality images" },
+    {
+      icon: "🎬",
+      name: "Video Content",
+      description: "Engaging videos & reels",
+    },
+    { icon: "📝", name: "Text Posts", description: "Compelling copy" },
+    { icon: "📊", name: "Infographics", description: "Data visualization" },
+    { icon: "🎨", name: "Carousel Posts", description: "Multi-image stories" },
+    { icon: "🎯", name: "Stories", description: "Ephemeral content" },
+    { icon: "🎙️", name: "Live Sessions", description: "Real-time engagement" },
+    { icon: "💬", name: "User-Generated", description: "Community content" },
   ];
 
-  const selectedPlatform = platforms.find(p => p.id === activePlatform);
+  const selectedPlatform = platforms.find((p) => p.id === activePlatform);
 
   return (
     <div className={styles.page}>
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroBackground}>
-          <div className={styles.socialBubble} style={{ top: '10%', left: '5%' }}>
+          <div
+            className={styles.socialBubble}
+            style={{ top: "10%", left: "5%" }}
+          >
             <Heart size={24} />
           </div>
-          <div className={styles.socialBubble} style={{ top: '20%', right: '10%' }}>
+          <div
+            className={styles.socialBubble}
+            style={{ top: "20%", right: "10%" }}
+          >
             <MessageCircle size={24} />
           </div>
-          <div className={styles.socialBubble} style={{ bottom: '25%', left: '15%' }}>
+          <div
+            className={styles.socialBubble}
+            style={{ bottom: "25%", left: "15%" }}
+          >
             <ThumbsUp size={24} />
           </div>
-          <div className={styles.socialBubble} style={{ bottom: '15%', right: '5%' }}>
+          <div
+            className={styles.socialBubble}
+            style={{ bottom: "15%", right: "5%" }}
+          >
             <Share2 size={24} />
           </div>
         </div>
-        
+
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
             <div className={styles.badge}>
               <Share2 size={16} />
               <span>Social Media Management</span>
             </div>
-            
+
             <h1 className={styles.heroTitle}>
               Grow Your Brand
-              <span className={styles.titleGradient}> Through Social Media</span>
+              <span className={styles.titleGradient}>
+                {" "}
+                Through Social Media
+              </span>
             </h1>
-            
+
             <p className={styles.heroDescription}>
-              From strategy to execution, we manage your social media presence 
-              so you can focus on running your business. Build a loyal community 
+              From strategy to execution, we manage your social media presence
+              so you can focus on running your business. Build a loyal community
               and drive real results.
             </p>
-            
+
             <div className={styles.heroButtons}>
               <Link to="/contact" className={styles.primaryBtn}>
                 Boost Your Social Presence
@@ -215,11 +266,11 @@ const SocialMediaManagement = () => {
             {platforms.map((platform, index) => (
               <div
                 key={platform.id}
-                className={`${styles.platformCard} ${activePlatform === platform.id ? styles.active : ''}`}
+                className={`${styles.platformCard} ${activePlatform === platform.id ? styles.active : ""}`}
                 onClick={() => setActivePlatform(platform.id)}
-                style={{ 
+                style={{
                   animationDelay: `${index * 0.1}s`,
-                  '--platform-color': platform.color
+                  "--platform-color": platform.color,
                 }}
               >
                 <div className={styles.platformIcon}>
@@ -242,8 +293,8 @@ const SocialMediaManagement = () => {
 
           <div className={styles.servicesGrid}>
             {services.map((service, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className={styles.serviceCard}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
@@ -276,8 +327,8 @@ const SocialMediaManagement = () => {
 
           <div className={styles.contentGrid}>
             {contentTypes.map((type, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className={styles.contentCard}
                 style={{ animationDelay: `${index * 0.05}s` }}
               >
@@ -302,12 +353,18 @@ const SocialMediaManagement = () => {
             <div className={styles.processCard}>
               <div className={styles.processNumber}>01</div>
               <h3>Discover & Plan</h3>
-              <p>We analyze your brand, audience, and competitors to create a winning strategy</p>
+              <p>
+                We analyze your brand, audience, and competitors to create a
+                winning strategy
+              </p>
             </div>
             <div className={styles.processCard}>
               <div className={styles.processNumber}>02</div>
               <h3>Create Content</h3>
-              <p>Our team produces high-quality, engaging content tailored to your brand</p>
+              <p>
+                Our team produces high-quality, engaging content tailored to
+                your brand
+              </p>
             </div>
             <div className={styles.processCard}>
               <div className={styles.processNumber}>03</div>
@@ -317,7 +374,9 @@ const SocialMediaManagement = () => {
             <div className={styles.processCard}>
               <div className={styles.processNumber}>04</div>
               <h3>Analyze & Optimize</h3>
-              <p>Monthly reports and continuous optimization for better results</p>
+              <p>
+                Monthly reports and continuous optimization for better results
+              </p>
             </div>
           </div>
         </div>
