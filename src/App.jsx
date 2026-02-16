@@ -4,9 +4,9 @@ import AgencyHomePage from "./components/AgencyHomePage/AgencyHomePage";
 import Navigation from "./components/Navigation/Navigation";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
-import FileUpload from "./pages/Fileupload";
 import SoftwareDevelopment from "./pages/SoftwareDevelopment";
 import MobileAppDevelopment from "./components/MobileAppDevelopment/MobileAppDevelopment";
+import WebDevelopment from "./components/WebDevelopment/WebDevelopment";
 
 function App() {
   return (
@@ -24,18 +24,7 @@ function App() {
           path="/services/mobile-app-development"
           element={<MobileAppDevelopment />}
         />
-        {/* <Route
-          path="/fileupload"
-          element={
-            <FileUpload
-              type="services"
-              multiple={true}
-              maxFiles={5}
-              onUploadSuccess={(data) => console.log("Success!", data)}
-              onUploadError={(error) => console.error("Error:", error)}
-            />
-          }
-        /> */}
+        <Route path="/services/web-development" element={<WebDevelopment />} />
       </Routes>
     </BrowserRouter>
   );
