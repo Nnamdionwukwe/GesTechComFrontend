@@ -24,7 +24,7 @@ function App() {
           path="/services/mobile-app-development"
           element={<MobileAppDevelopment />}
         />
-        <Route
+        {/* <Route
           path="/fileupload"
           element={
             <FileUpload
@@ -35,7 +35,7 @@ function App() {
               onUploadError={(error) => console.error("Error:", error)}
             />
           }
-        />
+        /> */}
       </Routes>
     </BrowserRouter>
   );
