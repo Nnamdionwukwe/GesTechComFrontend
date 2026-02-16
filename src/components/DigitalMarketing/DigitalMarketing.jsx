@@ -142,7 +142,7 @@ const DigitalMarketing = () => {
     { value: "350%", label: "Avg ROI", icon: DollarSign },
     { value: "5M+", label: "Leads Generated", icon: Users },
     { value: "85%", label: "Client Retention", icon: Award },
-    { value: "$50M+", label: "Revenue Driven", icon: TrendingUp },
+    { value: "#50M+", label: "Revenue Driven", icon: TrendingUp },
   ];
 
   const process = [
