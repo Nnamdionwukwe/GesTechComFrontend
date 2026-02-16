@@ -6,6 +6,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import FileUpload from "./pages/Fileupload";
 import SoftwareDevelopment from "./pages/SoftwareDevelopment";
+import MobileAppDevelopment from "./components/MobileAppDevelopment/MobileAppDevelopment";
 
 function App() {
   return (
@@ -18,6 +19,10 @@ function App() {
         <Route
           path="/services/software-development"
           element={<SoftwareDevelopment />}
+        />
+        <Route
+          path="/services/mobile-app-development"
+          element={<MobileAppDevelopment />}
         />
         <Route
           path="/fileupload"
