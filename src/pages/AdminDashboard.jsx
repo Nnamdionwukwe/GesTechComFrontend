@@ -1,0 +1,327 @@
+// src/pages/AdminDashboard.jsx
+import React, { useState, useEffect } from "react";
+import {
+  LayoutDashboard,
+  Briefcase,
+  FolderOpen,
+  MessageSquare,
+  Users,
+  FileText,
+  Mail,
+  Settings,
+  Sun,
+  Moon,
+  LogOut,
+  Menu,
+  X,
+  TrendingUp,
+  Activity,
+  UserPlus,
+  Eye,
+} from "lucide-react";
+import styles from "./AdminDashboard.module.css";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+const AdminDashboard = () => {
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [darkMode, setDarkMode] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Load theme preference
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setDarkMode(true);
+      document.documentElement.setAttribute("data-theme", "dark");
+    }
+  }, []);
+
+  // Fetch dashboard stats
+  useEffect(() => {
+    fetchDashboardStats();
+  }, []);
+
+  const fetchDashboardStats = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_URL}/api/admin/dashboard/stats`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data.success) {
+        setStats(data.stats);
+      }
+    } catch (error) {
+      console.error("Failed to fetch stats:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleTheme = () => {
+    const newTheme = !darkMode;
+    setDarkMode(newTheme);
+    localStorage.setItem("theme", newTheme ? "dark" : "light");
+    document.documentElement.setAttribute(
+      "data-theme",
+      newTheme ? "dark" : "light",
+    );
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/login";
+  };
+
+  const menuItems = [
+    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { id: "services", label: "Services", icon: Briefcase },
+    { id: "projects", label: "Projects", icon: FolderOpen },
+    { id: "testimonials", label: "Testimonials", icon: MessageSquare },
+    { id: "team", label: "Team Members", icon: Users },
+    { id: "blog", label: "Blog Posts", icon: FileText },
+    { id: "leads", label: "Leads", icon: Mail },
+    { id: "subscribers", label: "Subscribers", icon: UserPlus },
+  ];
+
+  return (
+    <div className={styles.adminContainer}>
+      {/* Sidebar */}
+      <aside
+        className={`${styles.adminSidebar} ${sidebarOpen ? styles.open : styles.closed}`}
+      >
+        <div className={styles.sidebarHeader}>
+          <div className={styles.logo}>
+            <div className={styles.logoIcon}>GT</div>
+            {sidebarOpen && (
+              <span className={styles.logoText}>GesTech Admin</span>
+            )}
+          </div>
+        </div>
+
+        <nav className={styles.sidebarNav}>
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.id}
+                className={`${styles.navItem} ${activeTab === item.id ? styles.active : ""}`}
+                onClick={() => setActiveTab(item.id)}
+              >
+                <Icon size={20} />
+                {sidebarOpen && <span>{item.label}</span>}
+              </button>
+            );
+          })}
+        </nav>
+
+        <div className={styles.sidebarFooter}>
+          <button className={styles.navItem} onClick={toggleTheme}>
+            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            {sidebarOpen && (
+              <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
+            )}
+          </button>
+          <button className={styles.navItem} onClick={handleLogout}>
+            <LogOut size={20} />
+            {sidebarOpen && <span>Logout</span>}
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className={styles.adminMain}>
+        {/* Header */}
+        <header className={styles.adminHeader}>
+          <button
+            className={styles.menuToggle}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+
+          <h1 className={styles.pageTitle}>
+            {menuItems.find((item) => item.id === activeTab)?.label ||
+              "Dashboard"}
+          </h1>
+
+          <div className={styles.headerActions}>
+            <button className={styles.iconButton} onClick={toggleTheme}>
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+          </div>
+        </header>
+
+        {/* Content */}
+        <div className={styles.adminContent}>
+          {activeTab === "dashboard" && (
+            <DashboardStats stats={stats} loading={loading} />
+          )}
+          {activeTab === "services" && (
+            <div>Services Management (Coming Soon)</div>
+          )}
+          {activeTab === "projects" && (
+            <div>Projects Management (Coming Soon)</div>
+          )}
+          {activeTab === "testimonials" && (
+            <div>Testimonials Management (Coming Soon)</div>
+          )}
+          {activeTab === "team" && <div>Team Management (Coming Soon)</div>}
+          {activeTab === "blog" && <div>Blog Management (Coming Soon)</div>}
+          {activeTab === "leads" && <div>Leads Management (Coming Soon)</div>}
+          {activeTab === "subscribers" && (
+            <div>Subscribers Management (Coming Soon)</div>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+};
+
+// Dashboard Stats Component
+const DashboardStats = ({ stats, loading }) => {
+  if (loading) {
+    return <div className={styles.loading}>Loading dashboard...</div>;
+  }
+
+  if (!stats) {
+    return <div className={styles.error}>Failed to load dashboard stats</div>;
+  }
+
+  const statCards = [
+    {
+      title: "Total Services",
+      value: stats.services?.total || 0,
+      icon: Briefcase,
+      color: "#3498db",
+      change: "+12%",
+    },
+    {
+      title: "Projects",
+      value: stats.projects?.total || 0,
+      icon: FolderOpen,
+      color: "#27ae60",
+      change: "+8%",
+    },
+    {
+      title: "New Leads",
+      value: stats.leads?.new || 0,
+      icon: TrendingUp,
+      color: "#e74c3c",
+      change: "+23%",
+    },
+    {
+      title: "Subscribers",
+      value: stats.subscribers?.total || 0,
+      icon: UserPlus,
+      color: "#ff6b35",
+      change: "+15%",
+    },
+  ];
+
+  return (
+    <div className={styles.dashboardStats}>
+      {/* Stat Cards */}
+      <div className={styles.statGrid}>
+        {statCards.map((stat, index) => {
+          const Icon = stat.icon;
+          return (
+            <div key={index} className={styles.statCard}>
+              <div
+                className={styles.statIcon}
+                style={{ backgroundColor: `${stat.color}20` }}
+              >
+                <Icon size={24} style={{ color: stat.color }} />
+              </div>
+              <div className={styles.statContent}>
+                <div className={styles.statLabel}>{stat.title}</div>
+                <div className={styles.statValue}>{stat.value}</div>
+                <div className={`${styles.statChange} ${styles.positive}`}>
+                  {stat.change} from last month
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Recent Activity */}
+      <div className={styles.dashboardGrid}>
+        <div className={styles.dashboardCard}>
+          <h3 className={styles.cardTitle}>
+            <Activity size={20} />
+            Recent Leads
+          </h3>
+          <div className={styles.leadList}>
+            {stats.leads?.recent?.slice(0, 5).map((lead, index) => (
+              <div key={index} className={styles.leadItem}>
+                <div className={styles.leadInfo}>
+                  <div className={styles.leadName}>{lead.full_name}</div>
+                  <div className={styles.leadEmail}>{lead.email}</div>
+                </div>
+                <span
+                  className={`${styles.badge} ${styles["badge" + lead.status.charAt(0).toUpperCase() + lead.status.slice(1)]}`}
+                >
+                  {lead.status}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.dashboardCard}>
+          <h3 className={styles.cardTitle}>
+            <Eye size={20} />
+            Leads by Status
+          </h3>
+          <div className={styles.statusList}>
+            {stats.leads?.byStatus?.map((item, index) => (
+              <div key={index} className={styles.statusItem}>
+                <div className={styles.statusInfo}>
+                  <span className={styles.statusLabel}>{item.status}</span>
+                  <span className={styles.statusCount}>{item.count}</span>
+                </div>
+                <div className={styles.statusBar}>
+                  <div
+                    className={styles.statusFill}
+                    style={{
+                      width: `${(item.count / stats.leads.total) * 100}%`,
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Stats */}
+      <div className={styles.quickStats}>
+        <div className={styles.quickStat}>
+          <div className={styles.quickStatLabel}>Blog Posts</div>
+          <div className={styles.quickStatValue}>
+            {stats.blog?.published || 0} / {stats.blog?.total || 0}
+          </div>
+        </div>
+        <div className={styles.quickStat}>
+          <div className={styles.quickStatLabel}>Testimonials</div>
+          <div className={styles.quickStatValue}>
+            {stats.testimonials?.total || 0}
+          </div>
+        </div>
+        <div className={styles.quickStat}>
+          <div className={styles.quickStatLabel}>Total Leads</div>
+          <div className={styles.quickStatValue}>{stats.leads?.total || 0}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AdminDashboard;
