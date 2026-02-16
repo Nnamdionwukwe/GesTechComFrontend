@@ -7,6 +7,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import SoftwareDevelopment from "./pages/SoftwareDevelopment";
 import MobileAppDevelopment from "./components/MobileAppDevelopment/MobileAppDevelopment";
 import WebDevelopment from "./components/WebDevelopment/WebDevelopment";
+import UIUXDesign from "./components/UIUXDesign/UIUXDesign";
+import SocialMediaManagement from "./components/SocialMediaManagement/SocialMediaManagement";
 
 function App() {
   return (
@@ -25,6 +27,11 @@ function App() {
           element={<MobileAppDevelopment />}
         />
         <Route path="/services/web-development" element={<WebDevelopment />} />
+        <Route path="/services/ui-ux-design" element={<UIUXDesign />} />
+        <Route
+          path="/services/social-media-management"
+          element={<SocialMediaManagement />}
+        />
       </Routes>
     </BrowserRouter>
   );
