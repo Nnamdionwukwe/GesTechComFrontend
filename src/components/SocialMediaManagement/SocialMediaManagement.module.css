@@ -6,6 +6,7 @@
   min-height: 100vh;
   background: var(--bg-primary);
   font-family: "Urbanist", sans-serif;
+  margin-top: 10px;
 }
 
 /* ==================== HERO SECTION ==================== */
