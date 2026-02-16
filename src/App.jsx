@@ -9,6 +9,7 @@ import MobileAppDevelopment from "./components/MobileAppDevelopment/MobileAppDev
 import WebDevelopment from "./components/WebDevelopment/WebDevelopment";
 import UIUXDesign from "./components/UIUXDesign/UIUXDesign";
 import SocialMediaManagement from "./components/SocialMediaManagement/SocialMediaManagement";
+import DigitalMarketing from "./components/DigitalMarketing/DigitalMarketing";
 
 function App() {
   return (
@@ -31,6 +32,10 @@ function App() {
         <Route
           path="/services/social-media-management"
           element={<SocialMediaManagement />}
+        />
+        <Route
+          path="/services/digital-marketing"
+          element={<DigitalMarketing />}
         />
       </Routes>
     </BrowserRouter>
