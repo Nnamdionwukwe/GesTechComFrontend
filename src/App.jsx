@@ -19,7 +19,7 @@ function App() {
         <Route path="/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route
-          path="/services/software-development"
+          path="/services/custom-software-development"
           element={<SoftwareDevelopment />}
         />
         <Route
