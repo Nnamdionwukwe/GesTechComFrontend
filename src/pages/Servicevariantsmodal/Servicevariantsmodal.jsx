@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, Check, Clock, ShoppingCart, Plus } from "lucide-react";
-import styles from "./ServiceVariantsModal.module.css";
+import styles from "./Servicevariantsmodal.module.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
