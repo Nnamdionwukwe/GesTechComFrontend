@@ -18,10 +18,12 @@ import {
   Activity,
   UserPlus,
   Eye,
+  CreditCard,
 } from "lucide-react";
 import styles from "./AdminDashboard.module.css";
+import PaymentsManagement from "./PaymentsManagement";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -86,6 +88,7 @@ const AdminDashboard = () => {
     { id: "testimonials", label: "Testimonials", icon: MessageSquare },
     { id: "team", label: "Team Members", icon: Users },
     { id: "blog", label: "Blog Posts", icon: FileText },
+    { id: "payments", label: "Payments", icon: CreditCard },
     { id: "leads", label: "Leads", icon: Mail },
     { id: "subscribers", label: "Subscribers", icon: UserPlus },
   ];
@@ -174,6 +177,7 @@ const AdminDashboard = () => {
           )}
           {activeTab === "team" && <div>Team Management (Coming Soon)</div>}
           {activeTab === "blog" && <div>Blog Management (Coming Soon)</div>}
+          {activeTab === "payments" && <PaymentsManagement />}
           {activeTab === "leads" && <div>Leads Management (Coming Soon)</div>}
           {activeTab === "subscribers" && (
             <div>Subscribers Management (Coming Soon)</div>
