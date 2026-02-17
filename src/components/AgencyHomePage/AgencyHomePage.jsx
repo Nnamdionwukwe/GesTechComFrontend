@@ -216,7 +216,7 @@ const AgencyHomePage = () => {
                       {service.has_variants
                         ? `${service.variants.length} Options Available`
                         : service.pricing_starts_at
-                          ? `From $${service.pricing_starts_at?.toLocaleString()}`
+                          ? `From #${service.pricing_starts_at?.toLocaleString()}-#500,000/Month`
                           : "Contact for pricing"}
                     </span>
                     <button
