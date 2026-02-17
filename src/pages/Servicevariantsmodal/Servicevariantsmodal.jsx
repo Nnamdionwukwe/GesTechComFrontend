@@ -94,7 +94,7 @@ const ServiceVariantsModal = ({ service, isOpen, onClose, onAddToCart }) => {
                   <div className={styles.variantHeader}>
                     <h3 className={styles.variantName}>{variant.name}</h3>
                     <div className={styles.variantPrice}>
-                      ${parseFloat(variant.price).toLocaleString()}
+                      #{parseFloat(variant.price).toLocaleString()}
                     </div>
                   </div>
 
