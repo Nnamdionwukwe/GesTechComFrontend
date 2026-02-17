@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Check, Clock, ShoppingCart, Plus } from "lucide-react";
+import { X, Check, Clock, ShoppingCart } from "lucide-react";
 import styles from "./Servicevariantsmodal.module.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
@@ -12,14 +12,28 @@ const ServiceVariantsModal = ({ service, isOpen, onClose, onAddToCart }) => {
 
   const handleAddToCart = async (variant) => {
     setLoading(true);
+
+    console.log("🛒 Adding to cart:", {
+      variantId: variant.id,
+      variantName: variant.name,
+      price: variant.price,
+    });
+
     try {
       const token = localStorage.getItem("token");
 
       if (!token) {
+        console.warn("⚠️ No authentication token found");
         alert("Please login to add items to cart");
         window.location.href = "/login";
         return;
       }
+
+      console.log("📤 Sending request to:", `${API_URL}/api/cart/add`);
+      console.log("📦 Request body:", {
+        serviceVariantId: variant.id,
+        quantity: 1,
+      });
 
       const response = await fetch(`${API_URL}/api/cart/add`, {
         method: "POST",
@@ -33,23 +47,38 @@ const ServiceVariantsModal = ({ service, isOpen, onClose, onAddToCart }) => {
         }),
       });
 
-      const data = await response.json();
+      console.log("📥 Response status:", response.status);
+      console.log("📥 Response ok:", response.ok);
 
-      if (data.success) {
+      const data = await response.json();
+      console.log("📥 Response data:", data);
+
+      if (response.ok && data.success) {
+        console.log("✅ Item added successfully!");
+
         // Call parent callback to update cart count
         if (onAddToCart) {
           onAddToCart(data.data);
         }
 
         // Show success message
-        alert(`${variant.name} added to cart!`);
+        alert(`✅ ${variant.name} added to cart successfully!`);
         onClose();
       } else {
-        alert(data.error || "Failed to add to cart");
+        const errorMessage =
+          data.error || data.message || "Failed to add to cart";
+        console.error("❌ Add to cart failed:", errorMessage);
+        console.error("❌ Full error:", data);
+        alert(`❌ ${errorMessage}`);
       }
     } catch (error) {
-      console.error("Add to cart error:", error);
-      alert("Failed to add to cart. Please try again.");
+      console.error("💥 Exception occurred:", error);
+      console.error("💥 Error details:", {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      });
+      alert("❌ Network error. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }
@@ -94,7 +123,7 @@ const ServiceVariantsModal = ({ service, isOpen, onClose, onAddToCart }) => {
                   <div className={styles.variantHeader}>
                     <h3 className={styles.variantName}>{variant.name}</h3>
                     <div className={styles.variantPrice}>
-                      #{parseFloat(variant.price).toLocaleString()}
+                      ₦{parseFloat(variant.price).toLocaleString()}
                     </div>
                   </div>
 

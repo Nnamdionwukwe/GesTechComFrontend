@@ -263,7 +263,7 @@ const Cart = () => {
 
                       <div className={styles.itemActions}>
                         <div className={styles.price}>
-                          #{parseFloat(item.price).toLocaleString()}
+                          ₦{parseFloat(item.price).toLocaleString()}
                         </div>
 
                         <div className={styles.quantity}>
@@ -287,7 +287,10 @@ const Cart = () => {
                         </div>
 
                         <div className={styles.subtotal}>
-                          #{parseFloat(item.price).toLocaleString()}
+                          ₦
+                          {(
+                            parseFloat(item.price) * item.quantity
+                          ).toLocaleString()}
                         </div>
 
                         <button
@@ -310,7 +313,7 @@ const Cart = () => {
 
                   <div className={styles.summaryRow}>
                     <span>Subtotal</span>
-                    <span>#{parseFloat(cart.subtotal).toLocaleString()}</span>
+                    <span>₦{parseFloat(cart.subtotal).toLocaleString()}</span>
                   </div>
 
                   <div className={styles.summaryRow}>
@@ -327,7 +330,7 @@ const Cart = () => {
 
                   <div className={styles.summaryTotal}>
                     <span>Total</span>
-                    <span>#{parseFloat(cart.subtotal).toLocaleString()}</span>
+                    <span>₦{parseFloat(cart.total).toLocaleString()}</span>
                   </div>
 
                   <Link to="/checkout" className={styles.checkoutBtn}>
@@ -335,7 +338,7 @@ const Cart = () => {
                     <ArrowRight size={20} />
                   </Link>
 
-                  <Link to="/shop" className={styles.continueBtn}>
+                  <Link to="/" className={styles.continueBtn}>
                     Continue Shopping
                   </Link>
                 </div>
@@ -344,7 +347,7 @@ const Cart = () => {
                 <div className={styles.trustBadges}>
                   <div className={styles.badge}>
                     <Package size={20} />
-                    <span>Free Shipping on orders over $50</span>
+                    <span>Secure Service Delivery</span>
                   </div>
                   <div className={styles.badge}>
                     <ShoppingBag size={20} />
