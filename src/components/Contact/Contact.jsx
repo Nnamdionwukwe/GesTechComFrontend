@@ -105,28 +105,29 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email Us",
-      value: "hello@gestech.com",
-      link: "mailto:hello@gestech.com",
+      value: "gestechc@gmail.com",
+      link: "mailto:gestechc@gmail.com",
       color: "#EF4444",
     },
     {
       icon: Phone,
       title: "Call Us",
-      value: "+1 (555) 123-4567",
-      link: "tel:+15551234567",
+      value: "+234-703-868-9373",
+      link: "tel:++2347038689373",
       color: "#10B981",
     },
     {
       icon: MapPin,
       title: "Visit Us",
-      value: "123 Business St, Suite 100\nSan Francisco, CA 94102",
-      link: "https://maps.google.com",
+      value: "Patience Offiong Streeet, Mabushipe, Abuja",
+      link: "https://maps.google.com?q=GesTechCom,%20Patience%20Offiong%20Street,%20Abuja&ftid=0xa37089b95c8eb48f:0xb422ffe07fb8ec7&entry=gps&shh=CAE&lucs=,94286590,94297699,94284478,94231188,94280568,47071704,94218641,94282134,94286869&g_st=ic",
+      // link: "https://maps.google.com",
       color: "#3B82F6",
     },
     {
       icon: Clock,
       title: "Working Hours",
-      value: "Mon - Fri: 9:00 AM - 6:00 PM\nSat - Sun: Closed",
+      value: "Mon - Sat: 9:00 AM - 6:00 PM\nSun: Closed",
       color: "#F59E0B",
     },
   ];
@@ -134,8 +135,16 @@ const Contact = () => {
   const socialLinks = [
     { icon: Linkedin, link: "https://linkedin.com", color: "#0A66C2" },
     { icon: Twitter, link: "https://twitter.com", color: "#1DA1F2" },
-    { icon: Facebook, link: "https://facebook.com", color: "#1877F2" },
-    { icon: Instagram, link: "https://instagram.com", color: "#E1306C" },
+    {
+      icon: Facebook,
+      link: "https://www.facebook.com/profile.php?id=61579387781598&mibextid=wwXIfr&mibextid=wwXIfr",
+      color: "#1877F2",
+    },
+    {
+      icon: Instagram,
+      link: "https://www.instagram.com/gestechcom_",
+      color: "#E1306C",
+    },
   ];
 
   return (
@@ -404,7 +413,7 @@ const Contact = () => {
               {/* Map Placeholder */}
               <div className={styles.mapPlaceholder}>
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019278451734!2d-122.41941708468164!3d37.77492977975903!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c6c8f4459%3A0xb10ed6d9b5050fa5!2sTwitter%20HQ!5e0!3m2!1sen!2sus!4v1635959542731!5m2!1sen!2sus"
+                  src="https://maps.google.com?q=GesTechCom,%20Patience%20Offiong%20Street,%20Abuja&ftid=0xa37089b95c8eb48f:0xb422ffe07fb8ec7&entry=gps&shh=CAE&lucs=,94286590,94297699,94284478,94231188,94280568,47071704,94218641,94282134,94286869&g_st=ic"
                   width="100%"
                   height="300"
                   style={{ border: 0, borderRadius: "16px" }}

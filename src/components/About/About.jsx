@@ -211,6 +211,18 @@ const About = () => {
       title: "Global Reach",
       description: "Serving clients across 15 countries",
     },
+    {
+      year: "2025",
+      title: "Added social Media Management/Content Creation",
+      description: "Serving businesses across 15 cites",
+    },
+    {
+      year: "2026",
+      title:
+        "Working On New Cutting Edge Technologies to Bring the Best Services to Our Clients",
+      description:
+        "Always improving our technology stack to serve our clients better",
+    },
   ];
 
   return (
@@ -366,7 +378,7 @@ const About = () => {
       </section>
 
       {/* Team */}
-      <section className={styles.teamSection}>
+      {/* <section className={styles.teamSection}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
             <h2>Meet Our Team</h2>
@@ -428,7 +440,7 @@ const About = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA */}
       <section className={styles.ctaSection}>
