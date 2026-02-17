@@ -137,7 +137,7 @@ const Contact = () => {
     { icon: Twitter, link: "https://twitter.com", color: "#1DA1F2" },
     {
       icon: Facebook,
-      link: "https://www.facebook.com/profile.php?id=61579387781598&mibextid=wwXIfr&mibextid=wwXIfr",
+      link: "https://www.facebook.com/share/1GjVzwigpm/?mibextid=wwXIfr",
       color: "#1877F2",
     },
     {
