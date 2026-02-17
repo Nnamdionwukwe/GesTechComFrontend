@@ -1,0 +1,443 @@
+/* OrderConfirmation.module.css */
+
+.page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: 100px 2rem 6rem;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ==================== SUCCESS HEADER ==================== */
+
+.successHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.successIcon {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(39, 174, 96, 0.1),
+    rgba(39, 174, 96, 0.2)
+  );
+  color: var(--success-color);
+  animation: scaleIn 0.6s ease 0.2s backwards;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.successHeader h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  color: var(--text-primary);
+  animation: fadeIn 0.6s ease 0.3s backwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.orderNumber {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 600;
+  animation: fadeIn 0.6s ease 0.4s backwards;
+}
+
+/* ==================== CONTENT GRID ==================== */
+
+.contentGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* ==================== CARD ==================== */
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2.5rem;
+  animation: fadeInUp 0.6s ease 0.5s backwards;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cardHeader svg {
+  color: var(--primary-color);
+}
+
+.cardHeader h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+/* ==================== ALERT ==================== */
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--warning-color);
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.alert svg {
+  color: var(--warning-color);
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.alert p {
+  margin: 0;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ==================== BANK DETAILS ==================== */
+
+.bankDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.detailRow:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.value {
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.amount {
+  font-size: 1.25rem;
+  color: var(--primary-color);
+}
+
+.copyGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.copyBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--primary-color);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copyBtn:hover {
+  background: var(--primary-bg);
+  border-color: var(--primary-color);
+}
+
+/* ==================== INSTRUCTIONS ==================== */
+
+.instructions {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.instructions svg {
+  color: var(--primary-color);
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.instructions p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ==================== ORDER DETAILS ==================== */
+
+.orderDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.badge.pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning-color);
+  border: 1px solid var(--warning-color);
+}
+
+.badge.paid {
+  background: rgba(39, 174, 96, 0.1);
+  color: var(--success-color);
+  border: 1px solid var(--success-color);
+}
+
+.badge.processing {
+  background: rgba(52, 152, 219, 0.1);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+/* ==================== NEXT STEPS ==================== */
+
+.nextSteps {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.6s ease 0.6s backwards;
+}
+
+.nextSteps h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 2rem;
+  color: var(--text-primary);
+}
+
+.stepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.step {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.stepNumber {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.stepContent {
+  flex: 1;
+}
+
+.stepContent strong {
+  display: block;
+  font-size: 1.0625rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.stepContent p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ==================== ACTIONS ==================== */
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  animation: fadeInUp 0.6s ease 0.7s backwards;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.125rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.primaryBtn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.primaryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+}
+
+.secondaryBtn {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.secondaryBtn:hover {
+  background: var(--bg-secondary);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 768px) {
+  .page {
+    padding: 80px 1.5rem 4rem;
+  }
+
+  .successHeader h1 {
+    font-size: 2rem;
+  }
+
+  .successIcon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .successIcon svg {
+    width: 56px;
+    height: 56px;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .detailRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .copyGroup {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .stepsList {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .successHeader h1 {
+    font-size: 1.75rem;
+  }
+
+  .orderNumber {
+    font-size: 1rem;
+  }
+
+  .cardHeader h2 {
+    font-size: 1.25rem;
+  }
+
+  .nextSteps {
+    padding: 1.5rem;
+  }
+}

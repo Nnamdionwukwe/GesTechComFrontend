@@ -12,10 +12,11 @@ import {
   Zap,
   Users,
   Award,
-  ChevronRight,
+  ShoppingCart,
 } from "lucide-react";
 import styles from "./AgencyHomePage.module.css";
 import { Link } from "react-router-dom";
+import ServiceVariantsModal from "../../pages/Servicevariantsmodal/Servicevariantsmodal";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
@@ -23,6 +24,9 @@ const AgencyHomePage = () => {
   const [services, setServices] = useState([]);
   const [projects, setProjects] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
+  const [selectedService, setSelectedService] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const [stats, setStats] = useState({
     projects: 150,
     clients: 80,
@@ -32,6 +36,7 @@ const AgencyHomePage = () => {
 
   useEffect(() => {
     fetchData();
+    fetchCartCount();
   }, []);
 
   const fetchData = async () => {
@@ -52,6 +57,43 @@ const AgencyHomePage = () => {
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
+  };
+
+  const fetchCartCount = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const response = await fetch(`${API_URL}/api/cart`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setCartCount(data.data.items.length);
+      }
+    } catch (error) {
+      console.error("Failed to fetch cart:", error);
+    }
+  };
+
+  const handleOpenModal = (service, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedService(null);
+  };
+
+  const handleAddToCart = (cartData) => {
+    setCartCount(cartData.items.length);
+    fetchCartCount(); // Refresh cart count
   };
 
   const serviceIcons = {
@@ -150,31 +192,42 @@ const AgencyHomePage = () => {
             {services.slice(0, 6).map((service) => {
               const Icon = serviceIcons[service.category] || Code;
               return (
-                <Link
-                  to={`/services/${service.slug}`}
-                  key={service.id}
-                  className={styles.serviceCard}
-                >
-                  <div className={styles.serviceIcon}>
-                    <Icon size={32} />
-                  </div>
-                  <h3>{service.name}</h3>
-                  <p>{service.tagline}</p>
-                  <div className={styles.serviceFeatures}>
-                    {service.features?.slice(0, 3).map((feature, idx) => (
-                      <span key={idx} className={styles.featureBadge}>
-                        <Check size={14} />
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
+                <div key={service.id} className={styles.serviceCard}>
+                  <Link
+                    to={`/services/${service.slug}`}
+                    className={styles.serviceCardLink}
+                  >
+                    <div className={styles.serviceIcon}>
+                      <Icon size={32} />
+                    </div>
+                    <h3>{service.name}</h3>
+                    <p>{service.tagline}</p>
+                    <div className={styles.serviceFeatures}>
+                      {service.features?.slice(0, 3).map((feature, idx) => (
+                        <span key={idx} className={styles.featureBadge}>
+                          <Check size={14} />
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+                  </Link>
                   <div className={styles.serviceFooter}>
                     <span className={styles.pricing}>
-                      From ${service.pricing_starts_at?.toLocaleString()}
+                      {service.has_variants
+                        ? `${service.variants.length} Options Available`
+                        : service.pricing_starts_at
+                          ? `From $${service.pricing_starts_at?.toLocaleString()}`
+                          : "Contact for pricing"}
                     </span>
-                    <ChevronRight size={20} className={styles.arrow} />
+                    <button
+                      className={styles.cartButton}
+                      onClick={(e) => handleOpenModal(service, e)}
+                      aria-label="View options and add to cart"
+                    >
+                      <ShoppingCart size={20} />
+                    </button>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>
@@ -381,6 +434,16 @@ const AgencyHomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* Service Variants Modal */}
+      {selectedService && (
+        <ServiceVariantsModal
+          service={selectedService}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onAddToCart={handleAddToCart}
+        />
+      )}
     </div>
   );
 };
