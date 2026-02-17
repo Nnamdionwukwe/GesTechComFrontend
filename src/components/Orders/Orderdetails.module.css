@@ -1,0 +1,570 @@
+/* OrderDetails.module.css */
+
+.page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding-top: 73px;
+}
+
+/* ==================== HEADER ==================== */
+
+.header {
+  padding: 3rem 2rem 2rem;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.breadcrumb a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.breadcrumb a:hover {
+  color: var(--primary-color);
+}
+
+.breadcrumb svg {
+  color: var(--border-color);
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.backBtn:hover {
+  background: var(--bg-primary);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.statusBadge.pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning-color);
+  border-color: var(--warning-color);
+}
+
+.statusBadge.processing {
+  background: rgba(52, 152, 219, 0.1);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.statusBadge.shipped {
+  background: rgba(142, 68, 173, 0.1);
+  color: #8e44ad;
+  border-color: #8e44ad;
+}
+
+.statusBadge.delivered {
+  background: rgba(39, 174, 96, 0.1);
+  color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.statusBadge.cancelled {
+  background: rgba(231, 76, 60, 0.1);
+  color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+.orderDate {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ==================== LOADING & ERROR ==================== */
+
+.loading,
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1.5rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading p {
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+}
+
+.error p {
+  color: var(--danger-color);
+  font-size: 1.125rem;
+}
+
+.backLink {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* ==================== MAIN SECTION ==================== */
+
+.mainSection {
+  padding: 3rem 2rem 6rem;
+}
+
+/* ==================== TIMELINE ==================== */
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+}
+
+.timelineStep {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+}
+
+.timelineIcon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.timelineStep.completed .timelineIcon {
+  background: var(--success-color);
+  border-color: var(--success-color);
+  color: white;
+}
+
+.timelineStep.active .timelineIcon {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+}
+
+.timelineContent h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--text-primary);
+}
+
+.timelineContent p {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.timelineLine {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--border-color);
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.timelineStep.completed + .timelineStep .timelineLine {
+  background: var(--success-color);
+}
+
+/* ==================== CANCELLED BANNER ==================== */
+
+.cancelledBanner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid var(--danger-color);
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.cancelledBanner svg {
+  color: var(--danger-color);
+  flex-shrink: 0;
+}
+
+.cancelledBanner strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.cancelledBanner p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ==================== CONTENT GRID ==================== */
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* ==================== CARD ==================== */
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.card:last-child {
+  margin-bottom: 0;
+}
+
+.card h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem;
+  color: var(--text-primary);
+}
+
+.card h2 svg {
+  color: var(--primary-color);
+}
+
+.card h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  color: var(--text-primary);
+}
+
+.card h3 svg {
+  color: var(--primary-color);
+}
+
+/* ==================== ITEMS ==================== */
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.itemImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.itemImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.itemImage svg {
+  color: var(--text-secondary);
+}
+
+.itemDetails h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--text-primary);
+}
+
+.itemDetails p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0 0 0.5rem;
+}
+
+.itemPrice {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.itemTotal {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+/* ==================== ORDER SUMMARY ==================== */
+
+.orderSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.summaryTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ==================== ADDRESS & INFO ==================== */
+
+.address p {
+  margin: 0 0 0.5rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.contactInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.paymentInfo,
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.infoRow:last-child {
+  border-bottom: none;
+}
+
+.paymentBadge {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.paymentBadge.pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning-color);
+}
+
+.paymentBadge.paid {
+  background: rgba(39, 174, 96, 0.1);
+  color: var(--success-color);
+}
+
+.trackingInfo {
+  text-align: center;
+}
+
+.trackingInfo p {
+  margin: 0 0 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.trackingNumber {
+  display: block;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.notes {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 1024px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .timelineLine {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding-top: 60px;
+  }
+
+  .header {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .titleSection {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mainSection {
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .timeline {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .item {
+    grid-template-columns: 1fr;
+  }
+
+  .itemTotal {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .itemImage {
+    width: 100%;
+    height: 150px;
+  }
+}

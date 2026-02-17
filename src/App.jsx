@@ -14,6 +14,11 @@ import Portfolio from "./components/Portfolio/Portfolio";
 import Contact from "./components/Contact/Contact";
 import About from "./components/About/About";
 import Blog from "./components/Blog/Blog";
+import Cart from "./components/Cart/Cart";
+import Checkout from "./components/Checkout/Checkout";
+import OrderConfirmation from "./components/OrderConfirmation/OrderConfirmation";
+import Orders from "./components/Orders/Orders";
+import OrderDetails from "./components/Orders/Orderdetails";
 
 function App() {
   return (
@@ -21,6 +26,12 @@ function App() {
       <Navigation />
       <Routes>
         <Route path="/" element={<AgencyHomePage />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <Route path="/order/:id" element={<OrderConfirmation />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/orders" element={<OrderDetails />} />
         <Route path="/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route
