@@ -28,7 +28,7 @@ const Navigation = () => {
       label: "Services",
       dropdown: [
         {
-          path: "/services/software-development",
+          path: "/services/custom-software-development",
           label: "Software Development",
         },
         { path: "/services/mobile-app-development", label: "Mobile Apps" },
