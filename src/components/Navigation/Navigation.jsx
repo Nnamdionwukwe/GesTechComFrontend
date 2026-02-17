@@ -54,7 +54,7 @@ const Navigation = () => {
         {/* Logo */}
         <Link to="/" className={styles.logo}>
           <div className={styles.logoIcon}>GT</div>
-          <span className={styles.logoText}>GesTech</span>
+          <span className={styles.logoText}>GesTechCom</span>
         </Link>
 
         {/* Desktop Navigation */}
