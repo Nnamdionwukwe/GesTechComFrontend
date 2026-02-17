@@ -316,7 +316,7 @@ const Cart = () => {
                     <span>₦{parseFloat(cart.subtotal).toLocaleString()}</span>
                   </div>
 
-                  <div className={styles.summaryRow}>
+                  {/* <div className={styles.summaryRow}>
                     <span>Shipping</span>
                     <span>Calculated at checkout</span>
                   </div>
@@ -324,7 +324,7 @@ const Cart = () => {
                   <div className={styles.summaryRow}>
                     <span>Tax</span>
                     <span>Calculated at checkout</span>
-                  </div>
+                  </div> */}
 
                   <div className={styles.divider}></div>
 
