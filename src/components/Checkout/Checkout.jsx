@@ -540,7 +540,10 @@ const Checkout = () => {
                         </span>
                       </div>
                       <span className={styles.itemPrice}>
-                        ${(item.price * item.quantity).toFixed(2)}
+                        #
+                        {parseFloat(
+                          item.price * item.quantity,
+                        )?.toLocaleString()}
                       </span>
                     </div>
                   ))}
@@ -549,7 +552,7 @@ const Checkout = () => {
                 <div className={styles.summaryTotals}>
                   <div className={styles.summaryRow}>
                     <span>Subtotal</span>
-                    <span>${cart?.subtotal?.toFixed(2)}</span>
+                    <span>#{parseFloat(cart?.subtotal)?.toLocaleString()}</span>
                   </div>
                   <div className={styles.summaryRow}>
                     <span>Shipping</span>
@@ -558,7 +561,7 @@ const Checkout = () => {
                   <div className={styles.divider}></div>
                   <div className={styles.summaryTotal}>
                     <span>Total</span>
-                    <span>${cart?.total?.toFixed(2)}</span>
+                    <span>#{parseFloat(cart?.total)?.toLocaleString()}</span>
                   </div>
                 </div>
               </div>

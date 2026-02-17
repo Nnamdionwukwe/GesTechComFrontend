@@ -263,7 +263,7 @@ const Cart = () => {
 
                       <div className={styles.itemActions}>
                         <div className={styles.price}>
-                          ${item.price.toFixed(2)}
+                          #{parseFloat(item.price).toLocaleString()}
                         </div>
 
                         <div className={styles.quantity}>
@@ -287,7 +287,7 @@ const Cart = () => {
                         </div>
 
                         <div className={styles.subtotal}>
-                          ${(item.price * item.quantity).toFixed(2)}
+                          #{parseFloat(item.price).toLocaleString()}
                         </div>
 
                         <button
@@ -310,7 +310,7 @@ const Cart = () => {
 
                   <div className={styles.summaryRow}>
                     <span>Subtotal</span>
-                    <span>${cart.subtotal.toFixed(2)}</span>
+                    <span>#{parseFloat(cart.subtotal).toLocaleString()}</span>
                   </div>
 
                   <div className={styles.summaryRow}>
@@ -327,7 +327,7 @@ const Cart = () => {
 
                   <div className={styles.summaryTotal}>
                     <span>Total</span>
-                    <span>${cart.total.toFixed(2)}</span>
+                    <span>#{parseFloat(cart.subtotal).toLocaleString()}</span>
                   </div>
 
                   <Link to="/checkout" className={styles.checkoutBtn}>
