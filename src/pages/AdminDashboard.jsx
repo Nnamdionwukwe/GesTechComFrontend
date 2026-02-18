@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import styles from "./AdminDashboard.module.css";
 import PaymentsManagement from "./PaymentsManagement";
+import LeadsManagement from "../components/LeadsManagement";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
@@ -182,6 +183,7 @@ const AdminDashboard = () => {
           {activeTab === "subscribers" && (
             <div>Subscribers Management (Coming Soon)</div>
           )}
+          {activeTab === "leads" && <LeadsManagement />}
         </div>
       </main>
     </div>
