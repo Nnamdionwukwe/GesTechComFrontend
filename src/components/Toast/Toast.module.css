@@ -1,0 +1,140 @@
+/* Toast.module.css */
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 300px;
+  max-width: 500px;
+  padding: 1rem 1.25rem;
+  background: var(--card-bg);
+  border: 1px solid;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation:
+    slideIn 0.3s ease,
+    fadeIn 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.toast::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.toast.success {
+  border-color: var(--success-color);
+}
+
+.toast.success::before {
+  background: var(--success-color);
+}
+
+.toast.error {
+  border-color: var(--danger-color);
+}
+
+.toast.error::before {
+  background: var(--danger-color);
+}
+
+.toast.warning {
+  border-color: var(--warning-color);
+}
+
+.toast.warning::before {
+  background: var(--warning-color);
+}
+
+.toast.info {
+  border-color: var(--primary-color);
+}
+
+.toast.info::before {
+  background: var(--primary-color);
+}
+
+.toastIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast.success .toastIcon {
+  color: var(--success-color);
+}
+
+.toast.error .toastIcon {
+  color: var(--danger-color);
+}
+
+.toast.warning .toastIcon {
+  color: var(--warning-color);
+}
+
+.toast.info .toastIcon {
+  color: var(--primary-color);
+}
+
+.toastMessage {
+  flex: 1;
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.toastClose {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toastClose:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .toast {
+    min-width: unset;
+    width: calc(100% - 2rem);
+    margin: 0 1rem;
+  }
+}

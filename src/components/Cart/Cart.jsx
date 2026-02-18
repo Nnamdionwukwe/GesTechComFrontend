@@ -12,7 +12,9 @@ import {
   ChevronRight,
   X,
 } from "lucide-react";
+useToast;
 import styles from "./Cart.module.css";
+import { useToast } from "../Toast/Toastcontainer";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
@@ -22,6 +24,7 @@ const Cart = () => {
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     fetchCart();
@@ -48,10 +51,12 @@ const Cart = () => {
         setCart(data.data);
       } else {
         setError(data.error);
+        toast.error(data.error || "Failed to load cart");
       }
     } catch (err) {
       console.error("Failed to fetch cart:", err);
       setError("Failed to load cart");
+      toast.error("Failed to load cart");
     } finally {
       setLoading(false);
     }
@@ -77,12 +82,15 @@ const Cart = () => {
 
       if (data.success) {
         setCart(data.data);
+        toast.success("Cart updated successfully");
       } else {
         setError(data.error);
+        toast.error(data.error || "Failed to update quantity");
       }
     } catch (err) {
       console.error("Failed to update quantity:", err);
       setError("Failed to update quantity");
+      toast.error("Failed to update quantity");
     } finally {
       setUpdating(false);
     }
@@ -104,12 +112,15 @@ const Cart = () => {
 
       if (data.success) {
         setCart(data.data);
+        toast.success("Item removed from cart");
       } else {
         setError(data.error);
+        toast.error(data.error || "Failed to remove item");
       }
     } catch (err) {
       console.error("Failed to remove item:", err);
       setError("Failed to remove item");
+      toast.error("Failed to remove item");
     } finally {
       setUpdating(false);
     }
@@ -133,12 +144,15 @@ const Cart = () => {
 
       if (data.success) {
         setCart(data.data);
+        toast.success("Cart cleared successfully");
       } else {
         setError(data.error);
+        toast.error(data.error || "Failed to clear cart");
       }
     } catch (err) {
       console.error("Failed to clear cart:", err);
       setError("Failed to clear cart");
+      toast.error("Failed to clear cart");
     } finally {
       setUpdating(false);
     }

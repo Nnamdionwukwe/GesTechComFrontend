@@ -175,7 +175,11 @@ const AgencyHomePage = () => {
                           : `${item.service?.name} - ${item.variant?.name}`}
                       </h4>
                       <p className={styles.itemPrice}>
-                        ${item.price.toFixed(2)} × {item.quantity}
+                        ₦
+                        {parseFloat(
+                          item.price * item.quantity,
+                        ).toLocaleString()}{" "}
+                        × {item.quantity}
                       </p>
                     </div>
                     <button

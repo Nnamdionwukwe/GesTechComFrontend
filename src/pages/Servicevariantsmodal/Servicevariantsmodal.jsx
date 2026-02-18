@@ -1,39 +1,30 @@
 import React, { useState } from "react";
 import { X, Check, Clock, ShoppingCart } from "lucide-react";
 import styles from "./Servicevariantsmodal.module.css";
+import { useToast } from "../../components/Toast/Toastcontainer";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
 const ServiceVariantsModal = ({ service, isOpen, onClose, onAddToCart }) => {
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   if (!isOpen) return null;
 
   const handleAddToCart = async (variant) => {
     setLoading(true);
 
-    console.log("🛒 Adding to cart:", {
-      variantId: variant.id,
-      variantName: variant.name,
-      price: variant.price,
-    });
-
     try {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        console.warn("⚠️ No authentication token found");
-        alert("Please login to add items to cart");
-        window.location.href = "/login";
+        toast.warning("Please login to add items to cart");
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1500);
         return;
       }
-
-      console.log("📤 Sending request to:", `${API_URL}/api/cart/add`);
-      console.log("📦 Request body:", {
-        serviceVariantId: variant.id,
-        quantity: 1,
-      });
 
       const response = await fetch(`${API_URL}/api/cart/add`, {
         method: "POST",
@@ -47,38 +38,25 @@ const ServiceVariantsModal = ({ service, isOpen, onClose, onAddToCart }) => {
         }),
       });
 
-      console.log("📥 Response status:", response.status);
-      console.log("📥 Response ok:", response.ok);
-
       const data = await response.json();
-      console.log("📥 Response data:", data);
 
       if (response.ok && data.success) {
-        console.log("✅ Item added successfully!");
-
         // Call parent callback to update cart count
         if (onAddToCart) {
           onAddToCart(data.data);
         }
 
-        // Show success message
-        alert(`✅ ${variant.name} added to cart successfully!`);
+        // Show success toast
+        toast.success(`${variant.name} added to cart successfully!`);
         onClose();
       } else {
         const errorMessage =
           data.error || data.message || "Failed to add to cart";
-        console.error("❌ Add to cart failed:", errorMessage);
-        console.error("❌ Full error:", data);
-        alert(`❌ ${errorMessage}`);
+        toast.error(errorMessage);
       }
     } catch (error) {
       console.error("💥 Exception occurred:", error);
-      console.error("💥 Error details:", {
-        name: error.name,
-        message: error.message,
-        stack: error.stack,
-      });
-      alert("❌ Network error. Please check your connection and try again.");
+      toast.error("Network error. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }

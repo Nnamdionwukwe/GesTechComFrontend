@@ -19,45 +19,51 @@ import Checkout from "./components/Checkout/Checkout";
 import OrderConfirmation from "./components/OrderConfirmation/OrderConfirmation";
 import Orders from "./components/Orders/Orders";
 import OrderDetails from "./components/Orders/Orderdetails";
+import { ToastProvider } from "./components/Toast/Toastcontainer";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Navigation />
-      <Routes>
-        <Route path="/" element={<AgencyHomePage />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/order-confirmation" element={<OrderConfirmation />} />
-        <Route path="/order/:id" element={<OrderConfirmation />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/orders" element={<OrderDetails />} />
-        <Route path="/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route
-          path="/services/custom-software-development"
-          element={<SoftwareDevelopment />}
-        />
-        <Route
-          path="/services/mobile-app-development"
-          element={<MobileAppDevelopment />}
-        />
-        <Route path="/services/web-development" element={<WebDevelopment />} />
-        <Route path="/services/ui-ux-design" element={<UIUXDesign />} />
-        <Route
-          path="/services/social-media-management"
-          element={<SocialMediaManagement />}
-        />
-        <Route
-          path="/services/digital-marketing"
-          element={<DigitalMarketing />}
-        />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
-    </BrowserRouter>
+    <ToastProvider>
+      <BrowserRouter>
+        <Navigation />
+        <Routes>
+          <Route path="/" element={<AgencyHomePage />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-confirmation" element={<OrderConfirmation />} />
+          <Route path="/order/:id" element={<OrderConfirmation />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/orders" element={<OrderDetails />} />
+          <Route path="/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route
+            path="/services/custom-software-development"
+            element={<SoftwareDevelopment />}
+          />
+          <Route
+            path="/services/mobile-app-development"
+            element={<MobileAppDevelopment />}
+          />
+          <Route
+            path="/services/web-development"
+            element={<WebDevelopment />}
+          />
+          <Route path="/services/ui-ux-design" element={<UIUXDesign />} />
+          <Route
+            path="/services/social-media-management"
+            element={<SocialMediaManagement />}
+          />
+          <Route
+            path="/services/digital-marketing"
+            element={<DigitalMarketing />}
+          />
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </BrowserRouter>
+    </ToastProvider>
   );
 }
 
