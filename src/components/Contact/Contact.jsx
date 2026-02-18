@@ -238,7 +238,7 @@ const Contact = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="+1 (555) 123-4567"
+                      placeholder="+234 (903) 123-4567"
                     />
                   </div>
 

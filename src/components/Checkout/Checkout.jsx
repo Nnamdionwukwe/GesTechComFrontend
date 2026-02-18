@@ -554,10 +554,6 @@ const Checkout = () => {
                     <span>Subtotal</span>
                     <span>₦{parseFloat(cart?.subtotal)?.toLocaleString()}</span>
                   </div>
-                  {/* <div className={styles.summaryRow}>
-                    <span>Shipping</span>
-                    <span>Calculated at next step</span>
-                  </div> */}
                   <div className={styles.divider}></div>
                   <div className={styles.summaryTotal}>
                     <span>Total</span>

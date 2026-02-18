@@ -13,20 +13,24 @@ import {
   Users,
   Award,
   ShoppingCart,
+  X,
 } from "lucide-react";
 import styles from "./AgencyHomePage.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ServiceVariantsModal from "../../pages/Servicevariantsmodal/Servicevariantsmodal";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
 const AgencyHomePage = () => {
+  const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [projects, setProjects] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
+  const [showCartPreview, setShowCartPreview] = useState(false);
   const [stats, setStats] = useState({
     projects: 150,
     clients: 80,
@@ -36,7 +40,7 @@ const AgencyHomePage = () => {
 
   useEffect(() => {
     fetchData();
-    fetchCartCount();
+    fetchCart();
   }, []);
 
   const fetchData = async () => {
@@ -59,7 +63,7 @@ const AgencyHomePage = () => {
     }
   };
 
-  const fetchCartCount = async () => {
+  const fetchCart = async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -73,6 +77,7 @@ const AgencyHomePage = () => {
       const data = await response.json();
       if (data.success) {
         setCartCount(data.data.items.length);
+        setCartItems(data.data.items);
       }
     } catch (error) {
       console.error("Failed to fetch cart:", error);
@@ -93,7 +98,28 @@ const AgencyHomePage = () => {
 
   const handleAddToCart = (cartData) => {
     setCartCount(cartData.items.length);
-    fetchCartCount(); // Refresh cart count
+    setCartItems(cartData.items);
+    fetchCart();
+  };
+
+  const handleRemoveItem = async (itemId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_URL}/api/cart/remove/${itemId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setCartCount(data.data.items.length);
+        setCartItems(data.data.items);
+      }
+    } catch (error) {
+      console.error("Failed to remove item:", error);
+    }
   };
 
   const serviceIcons = {
@@ -107,6 +133,84 @@ const AgencyHomePage = () => {
 
   return (
     <div className={styles.homePage}>
+      {/* Floating Cart Button */}
+      <div className={styles.floatingCart}>
+        <button
+          className={styles.cartButton}
+          onClick={() => setShowCartPreview(!showCartPreview)}
+          aria-label="Shopping cart"
+        >
+          <ShoppingCart size={24} />
+          {cartCount > 0 && (
+            <span className={styles.cartBadge}>{cartCount}</span>
+          )}
+        </button>
+
+        {/* Cart Preview */}
+        {showCartPreview && (
+          <div className={styles.cartPreview}>
+            <div className={styles.cartPreviewHeader}>
+              <h3>Your Cart ({cartCount})</h3>
+              <button
+                onClick={() => setShowCartPreview(false)}
+                className={styles.closePreview}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className={styles.cartPreviewItems}>
+              {cartItems.length === 0 ? (
+                <div className={styles.emptyCart}>
+                  <ShoppingCart size={48} />
+                  <p>Your cart is empty</p>
+                </div>
+              ) : (
+                cartItems.map((item) => (
+                  <div key={item.id} className={styles.cartPreviewItem}>
+                    <div className={styles.itemInfo}>
+                      <h4>
+                        {item.type === "product"
+                          ? item.product?.name
+                          : `${item.service?.name} - ${item.variant?.name}`}
+                      </h4>
+                      <p className={styles.itemPrice}>
+                        ${item.price.toFixed(2)} × {item.quantity}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleRemoveItem(item.id)}
+                      className={styles.removeItem}
+                      aria-label="Remove item"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {cartItems.length > 0 && (
+              <div className={styles.cartPreviewFooter}>
+                <button
+                  onClick={() => navigate("/cart")}
+                  className={styles.viewCartBtn}
+                >
+                  View Cart
+                </button>
+                <button
+                  onClick={() => navigate("/checkout")}
+                  className={styles.checkoutBtn}
+                >
+                  Checkout
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Rest of the component remains the same */}
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
@@ -220,7 +324,7 @@ const AgencyHomePage = () => {
                           : "Contact for pricing"}
                     </span>
                     <button
-                      className={styles.cartButton}
+                      className={styles.cartButtonSmall}
                       onClick={(e) => handleOpenModal(service, e)}
                       aria-label="View options and add to cart"
                     >
