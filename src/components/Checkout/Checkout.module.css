@@ -1,5 +1,31 @@
 /* Checkout.module.css */
 
+.paymentInfo {
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-top: 1.5rem;
+}
+
+.paymentInfo h4 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+  color: var(--text-primary);
+}
+
+.cardLogos {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cardLogos span {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
 .page {
   min-height: 100vh;
   background: var(--bg-primary);

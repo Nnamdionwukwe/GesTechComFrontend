@@ -20,6 +20,7 @@ import OrderConfirmation from "./components/OrderConfirmation/OrderConfirmation"
 import Orders from "./components/Orders/Orders";
 import OrderDetails from "./components/Orders/Orderdetails";
 import { ToastProvider } from "./components/Toast/Toastcontainer";
+import PaymentVerify from "./pages/PaymentVerify/PaymentVerify";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/" element={<AgencyHomePage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/payment/verify" element={<PaymentVerify />} />
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
           <Route path="/order/:id" element={<OrderConfirmation />} />
           <Route path="/orders" element={<Orders />} />

@@ -116,6 +116,14 @@ const Checkout = () => {
         return false;
       }
     }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(shippingAddress.email)) {
+      setError("Please enter a valid email address");
+      return false;
+    }
+
     return true;
   };
 
@@ -125,15 +133,50 @@ const Checkout = () => {
     setStep(2);
   };
 
+  const createOrder = async () => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/api/orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        shippingAddress,
+        billingAddress: sameAsShipping ? shippingAddress : billingAddress,
+        paymentMethod,
+        notes,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error(data.message || "Failed to create order");
+    }
+
+    return data.data;
+  };
+
   const handlePaystackCheckout = async () => {
     setProcessing(true);
     setError(null);
 
     try {
+      console.log("🛒 Starting Paystack checkout...");
+
+      // Step 1: Create order first
+      console.log("📦 Creating order...");
+      const order = await createOrder();
+      console.log("✅ Order created:", order.id);
+
+      // Step 2: Initialize Paystack payment
+      console.log("💳 Initializing Paystack payment...");
       const token = localStorage.getItem("token");
 
-      const response = await fetch(
-        `${API_URL}/api/checkout/paystack/initialize`,
+      const paystackResponse = await fetch(
+        `${API_URL}/api/paystack/initialize`,
         {
           method: "POST",
           headers: {
@@ -141,26 +184,30 @@ const Checkout = () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
+            orderId: order.id,
             email: shippingAddress.email,
-            shippingAddress,
-            billingAddress: sameAsShipping ? shippingAddress : billingAddress,
-            notes,
+            amount: cart.total,
           }),
         },
       );
 
-      const data = await response.json();
+      const paystackData = await paystackResponse.json();
+      console.log("📥 Paystack response:", paystackData);
 
-      if (data.success) {
-        // Redirect to Paystack
-        window.location.href = data.data.authorizationUrl;
+      if (paystackData.success && paystackData.data.authorization_url) {
+        console.log("✅ Redirecting to Paystack...");
+        // Redirect to Paystack payment page
+        window.location.href = paystackData.data.authorization_url;
       } else {
-        setError(data.message || "Payment initialization failed");
+        throw new Error(
+          paystackData.error ||
+            paystackData.message ||
+            "Payment initialization failed",
+        );
       }
     } catch (err) {
-      console.error("Paystack checkout error:", err);
-      setError("Failed to initialize payment");
-    } finally {
+      console.error("❌ Paystack checkout error:", err);
+      setError(err.message || "Failed to initialize payment");
       setProcessing(false);
     }
   };
@@ -170,39 +217,29 @@ const Checkout = () => {
     setError(null);
 
     try {
-      const token = localStorage.getItem("token");
+      console.log("🏦 Starting bank transfer checkout...");
 
-      const response = await fetch(`${API_URL}/api/checkout/bank-transfer`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          shippingAddress,
-          billingAddress: sameAsShipping ? shippingAddress : billingAddress,
-          notes,
-        }),
-      });
+      // Create order
+      const order = await createOrder();
+      console.log("✅ Order created:", order.id);
 
-      const data = await response.json();
-
-      if (data.success) {
-        // Navigate to bank transfer instructions page
-        navigate("/order-confirmation", {
-          state: {
-            order: data.data.order,
-            bankDetails: data.data.bankDetails,
-            instructions: data.data.instructions,
+      // Navigate to bank transfer instructions page
+      navigate("/order-confirmation", {
+        state: {
+          order: order,
+          paymentMethod: "bank_transfer",
+          bankDetails: {
+            bankName: "Access Bank",
+            accountName: "GesTechCom Limited",
+            accountNumber: "0123456789",
           },
-        });
-      } else {
-        setError(data.message || "Checkout failed");
-      }
+          instructions:
+            "Please transfer the exact amount and use your order number as reference.",
+        },
+      });
     } catch (err) {
-      console.error("Bank transfer checkout error:", err);
-      setError("Failed to complete checkout");
-    } finally {
+      console.error("❌ Bank transfer checkout error:", err);
+      setError(err.message || "Failed to complete checkout");
       setProcessing(false);
     }
   };
@@ -452,8 +489,17 @@ const Checkout = () => {
                           <div className={styles.paymentContent}>
                             <CreditCard size={24} />
                             <div>
-                              <strong>Card Payment (Paystack)</strong>
-                              <p>Pay securely with your debit/credit card</p>
+                              <strong>Pay with Card (Paystack)</strong>
+                              <p>Secure payment with debit/credit card</p>
+                              <small
+                                style={{
+                                  color: "var(--success-color)",
+                                  fontSize: "0.8rem",
+                                }}
+                              >
+                                ✓ Instant verification • Visa • Mastercard •
+                                Verve
+                              </small>
                             </div>
                           </div>
                         </label>
@@ -473,6 +519,14 @@ const Checkout = () => {
                             <div>
                               <strong>Bank Transfer</strong>
                               <p>Transfer directly to our bank account</p>
+                              <small
+                                style={{
+                                  color: "var(--text-secondary)",
+                                  fontSize: "0.8rem",
+                                }}
+                              >
+                                Manual verification required (1-24 hours)
+                              </small>
                             </div>
                           </div>
                         </label>
@@ -494,6 +548,7 @@ const Checkout = () => {
                       <button
                         onClick={() => setStep(1)}
                         className={styles.backBtn}
+                        disabled={processing}
                       >
                         <ArrowLeft size={20} />
                         Back to Shipping
@@ -506,12 +561,23 @@ const Checkout = () => {
                         {processing ? (
                           <>
                             <Loader size={20} className={styles.spinIcon} />
-                            Processing...
+                            {paymentMethod === "paystack"
+                              ? "Redirecting to Paystack..."
+                              : "Processing..."}
                           </>
                         ) : (
                           <>
-                            <Shield size={20} />
-                            Place Order
+                            {paymentMethod === "paystack" ? (
+                              <>
+                                <CreditCard size={20} />
+                                Pay ₦{parseFloat(cart?.total)?.toLocaleString()}
+                              </>
+                            ) : (
+                              <>
+                                <Shield size={20} />
+                                Place Order
+                              </>
+                            )}
                           </>
                         )}
                       </button>
@@ -567,9 +633,25 @@ const Checkout = () => {
                 <Shield size={20} />
                 <div>
                   <strong>Secure Checkout</strong>
-                  <p>Your information is protected</p>
+                  <p>
+                    {paymentMethod === "paystack"
+                      ? "256-bit SSL encryption by Paystack"
+                      : "Your information is protected"}
+                  </p>
                 </div>
               </div>
+
+              {/* Payment Info */}
+              {paymentMethod === "paystack" && (
+                <div className={styles.paymentInfo}>
+                  <h4>Accepted Payment Methods</h4>
+                  <div className={styles.cardLogos}>
+                    <span>💳 Visa</span>
+                    <span>💳 Mastercard</span>
+                    <span>💳 Verve</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
