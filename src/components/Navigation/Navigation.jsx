@@ -23,7 +23,7 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { path: "/", label: "Home" },
+    // { path: "/", label: "Home" },
     {
       label: "Services",
       dropdown: [
