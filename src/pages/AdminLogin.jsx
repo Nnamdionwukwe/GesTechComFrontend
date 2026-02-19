@@ -134,16 +134,6 @@ const AdminLogin = () => {
             {loading ? "Signing up..." : "Register"}
           </button>
         </form>
-
-        <div className={styles.loginFooter}>
-          <p className={styles.demoCredentials}>
-            <strong>Demo Credentials:</strong>
-            <br />
-            Email: admin@gestech.com
-            <br />
-            Password: Admin@123
-          </p>
-        </div>
       </div>
 
       <div className={styles.loginBackground}>
