@@ -1,3 +1,4 @@
+// src/pages/Register.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -15,7 +16,6 @@ import styles from "./Register.module.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
-// Password strength checker
 const getPasswordStrength = (password) => {
   if (!password) return { score: 0, label: "", color: "" };
   let score = 0;
@@ -24,7 +24,6 @@ const getPasswordStrength = (password) => {
   if (/[A-Z]/.test(password)) score++;
   if (/[0-9]/.test(password)) score++;
   if (/[^A-Za-z0-9]/.test(password)) score++;
-
   if (score <= 1) return { score, label: "Weak", color: "#e74c3c" };
   if (score <= 2) return { score, label: "Fair", color: "#f39c12" };
   if (score <= 3) return { score, label: "Good", color: "#3498db" };
@@ -45,20 +44,24 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
   const [form, setForm] = useState({
     full_name: "",
     email: "",
     password: "",
     confirm_password: "",
   });
-
   const [touched, setTouched] = useState({});
 
-  // Redirect if already logged in
+  // Redirect if already logged in — skip register page
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) navigate("/");
+    if (!token) return;
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      navigate(user?.role === "admin" ? "/admin" : "/", { replace: true });
+    } catch {
+      navigate("/", { replace: true });
+    }
   }, [navigate]);
 
   const strength = getPasswordStrength(form.password);
@@ -74,9 +77,7 @@ const Register = () => {
     setError("");
   };
 
-  const handleBlur = (e) => {
-    setTouched({ ...touched, [e.target.name]: true });
-  };
+  const handleBlur = (e) => setTouched({ ...touched, [e.target.name]: true });
 
   const validate = () => {
     if (!form.full_name.trim()) return "Full name is required";
@@ -84,7 +85,7 @@ const Register = () => {
       return "Name must be at least 2 characters";
     if (!form.email) return "Email is required";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      return "Enter a valid email address";
+      return "Enter a valid email";
     if (!form.password) return "Password is required";
     if (form.password.length < 8)
       return "Password must be at least 8 characters";
@@ -95,15 +96,12 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Mark all touched
     setTouched({
       full_name: true,
       email: true,
       password: true,
       confirm_password: true,
     });
-
     const validationError = validate();
     if (validationError) {
       setError(validationError);
@@ -127,24 +125,25 @@ const Register = () => {
       const data = await response.json();
 
       if (data.success) {
-        // Save token and user
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
         setSubmitted(true);
-
-        // Redirect after brief success moment
-        setTimeout(() => navigate("/"), 1500);
+        // Role-aware redirect after success
+        setTimeout(() => {
+          navigate(data.user?.role === "admin" ? "/admin" : "/", {
+            replace: true,
+          });
+        }, 1500);
       } else {
         setError(data.error || "Registration failed. Please try again.");
       }
-    } catch (err) {
+    } catch {
       setError("Connection error. Please check your internet and try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  // ── Success screen ────────────────────────────────────────────────────────
   if (submitted) {
     return (
       <div className={styles.page}>
@@ -163,7 +162,6 @@ const Register = () => {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        {/* Header */}
         <div className={styles.header}>
           <Link to="/" className={styles.logo}>
             <div className={styles.logoMark}>GTC</div>
@@ -174,7 +172,6 @@ const Register = () => {
           </p>
         </div>
 
-        {/* Error */}
         {error && (
           <div className={styles.errorBanner}>
             <XCircle size={16} />
@@ -182,7 +179,6 @@ const Register = () => {
           </div>
         )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className={styles.form} noValidate>
           {/* Full Name */}
           <div
@@ -209,7 +205,7 @@ const Register = () => {
 
           {/* Email */}
           <div
-            className={`${styles.field} ${touched.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) && form.email ? styles.fieldError : ""}`}
+            className={`${styles.field} ${touched.email && form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) ? styles.fieldError : ""}`}
           >
             <label className={styles.label}>Email Address</label>
             <div className={styles.inputWrap}>
@@ -251,8 +247,6 @@ const Register = () => {
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
-
-            {/* Strength meter */}
             {form.password && (
               <div className={styles.strengthWrap}>
                 <div className={styles.strengthBar}>
@@ -276,8 +270,6 @@ const Register = () => {
                 </span>
               </div>
             )}
-
-            {/* Rules */}
             {touched.password && form.password && (
               <div className={styles.rules}>
                 {rules.map((r, i) => (
@@ -327,7 +319,6 @@ const Register = () => {
               )}
           </div>
 
-          {/* Terms note */}
           <p className={styles.terms}>
             By creating an account, you agree to our{" "}
             <Link to="/terms" className={styles.link}>
@@ -340,7 +331,6 @@ const Register = () => {
             .
           </p>
 
-          {/* Submit */}
           <button type="submit" className={styles.submitBtn} disabled={loading}>
             {loading ? (
               <span className={styles.spinner} />
@@ -354,7 +344,6 @@ const Register = () => {
           </button>
         </form>
 
-        {/* Footer */}
         <div className={styles.footer}>
           <p>
             Already have an account?{" "}
@@ -364,13 +353,11 @@ const Register = () => {
           </p>
         </div>
       </div>
-
       <Blobs />
     </div>
   );
 };
 
-// Background decorative blobs
 const Blobs = () => (
   <div className={styles.blobs} aria-hidden>
     <div className={`${styles.blob} ${styles.blob1}`} />

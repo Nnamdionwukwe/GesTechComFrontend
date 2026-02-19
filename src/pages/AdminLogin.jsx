@@ -23,10 +23,16 @@ const AdminLogin = () => {
     }
   }, []);
 
-  // Redirect if already logged in
+  // Redirect if already logged in — skip login page for logged-in users
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) navigate("/admin");
+    if (!token) return;
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      navigate(user?.role === "admin" ? "/admin" : "/", { replace: true });
+    } catch {
+      navigate("/", { replace: true });
+    }
   }, [navigate]);
 
   const toggleTheme = () => {
