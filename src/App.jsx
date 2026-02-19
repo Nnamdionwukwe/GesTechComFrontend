@@ -35,7 +35,7 @@ function App() {
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
           <Route path="/order/:id" element={<OrderConfirmation />} />
           <Route path="/orders" element={<Orders />} />
-          <Route path="/orders" element={<OrderDetails />} />
+          <Route path="/orders/:id" element={<OrderDetails />} />
           <Route path="/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route

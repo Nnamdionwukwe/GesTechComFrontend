@@ -301,9 +301,8 @@ const Orders = () => {
                     )}
 
                     <div className={styles.orderTotal}>
-                      <DollarSign size={20} />
                       <span className={styles.totalAmount}>
-                        ${order.total.toFixed(2)}
+                        ₦{parseFloat(order.total).toLocaleString()}.00
                       </span>
                     </div>
                   </div>

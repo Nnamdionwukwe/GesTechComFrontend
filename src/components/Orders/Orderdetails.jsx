@@ -226,11 +226,11 @@ const OrderDetails = () => {
                         <h4>{item.product_name}</h4>
                         <p>Quantity: {item.quantity}</p>
                         <span className={styles.itemPrice}>
-                          ${item.price.toFixed(2)} each
+                          ₦{parseFloat(item.price).toLocaleString()}.00 each
                         </span>
                       </div>
                       <div className={styles.itemTotal}>
-                        ${(item.price * item.quantity).toFixed(2)}
+                        ₦{(item.price * item.quantity).toLocaleString()}.00
                       </div>
                     </div>
                   ))}
@@ -239,23 +239,27 @@ const OrderDetails = () => {
                 <div className={styles.orderSummary}>
                   <div className={styles.summaryRow}>
                     <span>Subtotal</span>
-                    <span>${order.subtotal.toFixed(2)}</span>
+                    <span>
+                      ₦{parseFloat(order.subtotal).toLocaleString()}.00
+                    </span>
                   </div>
                   {order.shipping_cost > 0 && (
                     <div className={styles.summaryRow}>
                       <span>Shipping</span>
-                      <span>${order.shipping_cost.toFixed(2)}</span>
+                      <span>
+                        ₦{parseFloat(order.shipping_cost).toLocaleString()}.00
+                      </span>
                     </div>
                   )}
                   {order.tax > 0 && (
                     <div className={styles.summaryRow}>
                       <span>Tax</span>
-                      <span>${order.tax.toFixed(2)}</span>
+                      <span>₦{parseFloat(order.tax).toLocaleString()}.00</span>
                     </div>
                   )}
                   <div className={styles.summaryTotal}>
                     <span>Total</span>
-                    <span>${order.total.toFixed(2)}</span>
+                    <span>₦{parseFloat(order.total).toLocaleString()}.00</span>
                   </div>
                 </div>
               </div>
