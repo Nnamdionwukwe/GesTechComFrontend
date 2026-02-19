@@ -221,7 +221,7 @@ const AgencyHomePage = () => {
           <div className={styles.heroText}>
             <span className={styles.badge}>
               <Zap size={16} />
-              <span>Welcome to GesTechCom</span>
+              <span>GTC</span>
             </span>
             <h1 className={styles.heroTitle}>
               Transform Your Business with
@@ -535,7 +535,10 @@ const AgencyHomePage = () => {
                 Get Started Now
                 <ArrowRight size={20} />
               </Link>
-              <Link to="/services" className={styles.ctaSecondary}>
+              <Link
+                to="/services/custom-software-development"
+                className={styles.ctaSecondary}
+              >
                 Explore Services
               </Link>
             </div>

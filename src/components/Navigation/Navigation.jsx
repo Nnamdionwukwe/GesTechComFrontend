@@ -53,7 +53,7 @@ const Navigation = () => {
       <div className={styles.container}>
         {/* Logo */}
         <Link to="/" className={styles.logo}>
-          <div className={styles.logoIcon}>GT</div>
+          <div className={styles.logoIcon}>GTC</div>
           <span className={styles.logoText}>GesTechCom</span>
         </Link>
 
