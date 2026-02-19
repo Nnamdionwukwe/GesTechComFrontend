@@ -218,7 +218,7 @@ const Cart = () => {
               </div>
               <h2>Your cart is empty</h2>
               <p>Start shopping to add items to your cart</p>
-              <Link to="/shop" className={styles.shopButton}>
+              <Link to="/" className={styles.shopButton}>
                 <Package size={20} />
                 Browse Products
               </Link>
