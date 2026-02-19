@@ -80,14 +80,15 @@ const ProjectsManagement = () => {
   const fetchProjects = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/api/agency/portfolio`, {
+      const response = await fetch(`${API_URL}/api/admin/projects`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       const data = await response.json();
       if (data.success) {
-        setProjects(data.data.projects || data.data);
+        // setProjects(data.data.projects || data.data);
+        setProjects(data.projects || []);
       }
     } catch (err) {
       console.error("Failed to fetch projects:", err);

@@ -357,7 +357,7 @@ const MemberCard = ({ member, onEdit, onDelete }) => {
           {member.avatar ? (
             <img src={member.avatar} alt={member.full_name} />
           ) : (
-            <span>{member.full_name.charAt(0).toUpperCase()}</span>
+            <span>{(member.full_name || "?").charAt(0).toUpperCase()}</span>
           )}
         </div>
         <div className={styles.cardBadges}>
