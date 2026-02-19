@@ -11,6 +11,7 @@
   overflow: hidden;
 }
 
+/* ── Theme toggle ── */
 .themeToggleBtn {
   position: fixed;
   top: 2rem;
@@ -34,6 +35,7 @@
   box-shadow: 0 4px 12px var(--shadow);
 }
 
+/* ── Card ── */
 .loginCard {
   width: 100%;
   max-width: 420px;
@@ -44,8 +46,10 @@
   box-shadow: 0 10px 40px var(--shadow);
   position: relative;
   z-index: 10;
+  animation: slideIn 0.4s ease-out;
 }
 
+/* ── Header ── */
 .loginHeader {
   text-align: center;
   margin-bottom: 2rem;
@@ -54,7 +58,7 @@
 .loginLogo {
   display: flex;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .loginLogoIcon {
@@ -67,31 +71,33 @@
   justify-content: center;
   color: white;
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 1.75rem;
   box-shadow: 0 8px 24px rgba(52, 152, 219, 0.3);
+  letter-spacing: -1px;
 }
 
 .loginTitle {
   font-size: 1.875rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.4rem;
 }
 
 .loginSubtitle {
-  font-size: 1rem;
+  font-size: 0.9375rem;
   color: var(--text-secondary);
   margin: 0;
 }
 
+/* ── Error ── */
 .errorMessage {
-  background-color: #fee;
-  border: 1px solid #fcc;
-  color: #c33;
-  padding: 0.875rem;
+  background-color: rgba(231, 76, 60, 0.08);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  color: #e74c3c;
+  padding: 0.875rem 1rem;
   border-radius: 12px;
   margin-bottom: 1.5rem;
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
   text-align: center;
 }
 
@@ -101,6 +107,7 @@
   color: #ff6b6b;
 }
 
+/* ── Form ── */
 .loginForm {
   display: flex;
   flex-direction: column;
@@ -114,8 +121,8 @@
 }
 
 .formLabel {
-  font-size: 0.9375rem;
-  font-weight: 500;
+  font-size: 0.875rem;
+  font-weight: 600;
   color: var(--text-primary);
 }
 
@@ -135,18 +142,27 @@
 .formInput {
   width: 100%;
   padding: 0.875rem 1rem 0.875rem 3rem;
-  border: 1px solid var(--border-color);
+  border: 1.5px solid var(--border-color);
   border-radius: 12px;
   font-size: 1rem;
+  font-family: inherit;
   background-color: var(--input-bg);
   color: var(--text-primary);
-  transition: all 0.2s ease;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   outline: none;
+  box-sizing: border-box;
 }
 
 .formInput:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.12);
+}
+
+.formInput::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
 }
 
 .passwordToggle {
@@ -167,7 +183,11 @@
   color: var(--primary-color);
 }
 
+/* ── Button ── */
 .loginButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   padding: 1rem;
   background: linear-gradient(135deg, var(--primary-color), #6366f1);
@@ -176,14 +196,19 @@
   border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 0.5rem;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    opacity 0.2s;
+  margin-top: 0.25rem;
+  min-height: 52px;
 }
 
 .loginButton:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 8px 24px rgba(52, 152, 219, 0.3);
 }
 
 .loginButton:active:not(:disabled) {
@@ -191,32 +216,54 @@
 }
 
 .loginButton:disabled {
-  opacity: 0.6;
+  opacity: 0.65;
   cursor: not-allowed;
 }
 
-.loginFooter {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
+/* ── Spinner ── */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
 }
 
-.demoCredentials {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Footer ── */
+.loginFooter {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
   text-align: center;
-  line-height: 1.6;
+}
+
+.footerText {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
   margin: 0;
 }
 
-.demoCredentials strong {
-  color: var(--text-primary);
-  display: block;
-  margin-bottom: 0.5rem;
+.footerLink {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s;
 }
 
-/* ==================== BACKGROUND SHAPES ==================== */
+.footerLink:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
 
+/* ── Background shapes ── */
 .loginBackground {
   position: absolute;
   inset: 0;
@@ -227,7 +274,7 @@
 .backgroundShape {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.1;
+  opacity: 0.08;
   animation: float 20s infinite ease-in-out;
 }
 
@@ -271,8 +318,28 @@
   }
 }
 
-/* ==================== RESPONSIVE ==================== */
+/* ── Animation ── */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+/* ── Dark mode ── */
+:global([data-theme="dark"]) .loginButton {
+  background: linear-gradient(135deg, #64b5f6, #7c7cf1);
+}
+
+:global([data-theme="dark"]) .backgroundShape {
+  opacity: 0.04;
+}
+
+/* ── Responsive ── */
 @media (max-width: 480px) {
   .loginContainer {
     padding: 1rem;
@@ -280,6 +347,7 @@
 
   .loginCard {
     padding: 2rem 1.5rem;
+    border-radius: 20px;
   }
 
   .themeToggleBtn {
@@ -300,33 +368,6 @@
   }
 
   .backgroundShape {
-    opacity: 0.05;
+    opacity: 0.04;
   }
-}
-
-/* ==================== ANIMATIONS ==================== */
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.loginCard {
-  animation: slideIn 0.4s ease-out;
-}
-
-/* ==================== DARK MODE ADJUSTMENTS ==================== */
-
-:global([data-theme="dark"]) .loginButton {
-  background: linear-gradient(135deg, #64b5f6, #7c7cf1);
-}
-
-:global([data-theme="dark"]) .backgroundShape {
-  opacity: 0.05;
 }

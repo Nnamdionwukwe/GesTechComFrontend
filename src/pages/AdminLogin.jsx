@@ -1,11 +1,13 @@
 // src/pages/AdminLogin.jsx
 import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Lock, Mail, Eye, EyeOff, Sun, Moon } from "lucide-react";
 import styles from "./AdminLogin.module.css";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
 const AdminLogin = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -21,13 +23,19 @@ const AdminLogin = () => {
     }
   }, []);
 
+  // Redirect if already logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) navigate("/admin");
+  }, [navigate]);
+
   const toggleTheme = () => {
-    const newTheme = !darkMode;
-    setDarkMode(newTheme);
-    localStorage.setItem("theme", newTheme ? "dark" : "light");
+    const next = !darkMode;
+    setDarkMode(next);
+    localStorage.setItem("theme", next ? "dark" : "light");
     document.documentElement.setAttribute(
       "data-theme",
-      newTheme ? "dark" : "light",
+      next ? "dark" : "light",
     );
   };
 
@@ -39,9 +47,7 @@ const AdminLogin = () => {
     try {
       const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
@@ -52,9 +58,9 @@ const AdminLogin = () => {
         localStorage.setItem("user", JSON.stringify(data.user));
         window.location.href = "/admin";
       } else {
-        setError(data.error || "Login failed");
+        setError(data.error || "Login failed. Check your credentials.");
       }
-    } catch (error) {
+    } catch {
       setError("Connection error. Please try again.");
     } finally {
       setLoading(false);
@@ -63,23 +69,31 @@ const AdminLogin = () => {
 
   return (
     <div className={styles.loginContainer}>
-      <button className={styles.themeToggleBtn} onClick={toggleTheme}>
+      {/* Theme toggle */}
+      <button
+        className={styles.themeToggleBtn}
+        onClick={toggleTheme}
+        title="Toggle theme"
+      >
         {darkMode ? <Sun size={20} /> : <Moon size={20} />}
       </button>
 
       <div className={styles.loginCard}>
+        {/* Header */}
         <div className={styles.loginHeader}>
           <div className={styles.loginLogo}>
             <div className={styles.loginLogoIcon}>GTC</div>
           </div>
-          <h1 className={styles.loginTitle}>Admin Login</h1>
+          <h1 className={styles.loginTitle}>Welcome back</h1>
           <p className={styles.loginSubtitle}>
             Sign in to access the dashboard
           </p>
         </div>
 
+        {/* Error */}
         {error && <div className={styles.errorMessage}>{error}</div>}
 
+        {/* Form */}
         <form onSubmit={handleSubmit} className={styles.loginForm}>
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Email</label>
@@ -91,6 +105,7 @@ const AdminLogin = () => {
                 placeholder="admin@gestech.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
                 required
               />
             </div>
@@ -106,12 +121,14 @@ const AdminLogin = () => {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
                 required
               />
               <button
                 type="button"
                 className={styles.passwordToggle}
                 onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -123,23 +140,26 @@ const AdminLogin = () => {
             className={styles.loginButton}
             disabled={loading}
           >
-            {loading ? "Signing in..." : "Sign In"}
-          </button>
-          <button
-            type="submit"
-            className={styles.loginButton}
-            disabled={loading}
-            to="/register"
-          >
-            {loading ? "Signing up..." : "Register"}
+            {loading ? <span className={styles.spinner} /> : "Sign In"}
           </button>
         </form>
+
+        {/* Footer — link to Register */}
+        <div className={styles.loginFooter}>
+          <p className={styles.footerText}>
+            Don't have an account?{" "}
+            <Link to="/register" className={styles.footerLink}>
+              Create one
+            </Link>
+          </p>
+        </div>
       </div>
 
+      {/* Background shapes */}
       <div className={styles.loginBackground}>
-        <div className={`${styles.backgroundShape} ${styles.shape1}`}></div>
-        <div className={`${styles.backgroundShape} ${styles.shape2}`}></div>
-        <div className={`${styles.backgroundShape} ${styles.shape3}`}></div>
+        <div className={`${styles.backgroundShape} ${styles.shape1}`} />
+        <div className={`${styles.backgroundShape} ${styles.shape2}`} />
+        <div className={`${styles.backgroundShape} ${styles.shape3}`} />
       </div>
     </div>
   );
