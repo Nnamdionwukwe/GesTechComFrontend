@@ -36,7 +36,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment/verify" element={<PaymentVerify />} />
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
-          <Route path="/order/:id" element={<OrderConfirmation />} />
+          {/* <Route path="/order/:id" element={<OrderConfirmation />} /> */}
           <Route path="/orders" element={<Orders />} />
           <Route path="/orders/:id" element={<OrderDetails />} />
           <Route path="/admin" element={<AdminDashboard />} />

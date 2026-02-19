@@ -43,8 +43,8 @@ const Navigation = () => {
     { path: "/blog", label: "Blog" },
     { path: "/contact", label: "Contact" },
     { path: "/orders", label: "Orders" },
-    { path: "/register", label: "Register" },
     { path: "/login", label: "Login" },
+    // { path: "/register", label: "Register" },
   ];
 
   const isActive = (path) => location.pathname === path;

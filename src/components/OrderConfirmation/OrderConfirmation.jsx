@@ -166,7 +166,7 @@ const OrderConfirmation = () => {
               <div className={styles.detailRow}>
                 <span className={styles.label}>Total Amount</span>
                 <span className={`${styles.value} ${styles.amount}`}>
-                  ${order.total.toFixed(2)}
+                  ₦{parseFloat(order.total).toLocaleString()}.00
                 </span>
               </div>
 
@@ -195,7 +195,7 @@ const OrderConfirmation = () => {
         </div>
 
         {/* Next Steps */}
-        <div className={styles.nextSteps}>
+        {/* <div className={styles.nextSteps}>
           <h3>What's Next?</h3>
           <div className={styles.stepsList}>
             <div className={styles.step}>
@@ -229,7 +229,7 @@ const OrderConfirmation = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Action Buttons */}
         <div className={styles.actions}>

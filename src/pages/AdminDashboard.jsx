@@ -29,6 +29,7 @@ import TestimonialsManagement from "../components/admin/TestimonialsManagement";
 import TeamManagement from "../components/admin/TeamManagement";
 import BlogManagement from "../components/admin/BlogManagement";
 import SubscribersManagement from "../components/admin/SubscribersManagement";
+import UsersManagement from "../components/admin/UsersManagement";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
@@ -98,6 +99,7 @@ const AdminDashboard = () => {
     { id: "payments", label: "Payments", icon: CreditCard },
     { id: "leads", label: "Leads", icon: Mail },
     { id: "subscribers", label: "Subscribers", icon: UserPlus },
+    { id: "users", label: "Users", icon: Users },
   ];
 
   return (
@@ -181,6 +183,7 @@ const AdminDashboard = () => {
           {activeTab === "payments" && <PaymentsManagement />}
           {activeTab === "subscribers" && <SubscribersManagement />}
           {activeTab === "leads" && <LeadsManagement />}
+          {activeTab === "users" && <UsersManagement />}
         </div>
       </main>
     </div>
