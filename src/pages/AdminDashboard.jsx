@@ -25,6 +25,7 @@ import PaymentsManagement from "./PaymentsManagement";
 import LeadsManagement from "../components/LeadsManagement";
 import ProjectsManagement from "../components/admin/ProjectsManagement";
 import ServicesManagement from "../components/admin/ServicesManagement";
+import TestimonialsManagement from "../components/admin/TestimonialsManagement";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
@@ -171,9 +172,7 @@ const AdminDashboard = () => {
           )}
           {activeTab === "services" && <ServicesManagement />}
           {activeTab === "projects" && <ProjectsManagement />}
-          {activeTab === "testimonials" && (
-            <div>Testimonials Management (Coming Soon)</div>
-          )}
+          {activeTab === "testimonials" && <TestimonialsManagement />}
           {activeTab === "team" && <div>Team Management (Coming Soon)</div>}
           {activeTab === "blog" && <div>Blog Management (Coming Soon)</div>}
           {activeTab === "payments" && <PaymentsManagement />}
