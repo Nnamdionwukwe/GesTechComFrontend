@@ -4,6 +4,7 @@
   display: flex;
   min-height: 100vh;
   background-color: var(--bg-secondary);
+  margin-top: 130px;
 }
 
 /* ==================== SIDEBAR ==================== */
@@ -19,7 +20,7 @@
   left: 0;
   top: 0;
   height: 100vh;
-  overflow-y: auto;
+  overflow: hidden;
   z-index: 100;
 }
 
@@ -28,19 +29,24 @@
 }
 
 .sidebarHeader {
-  padding: 1.5rem 1rem;
+  padding: 1.25rem 1rem;
   border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 68px;
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  overflow: hidden;
 }
 
 .logoIcon {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   background: linear-gradient(135deg, var(--primary-color), #6366f1);
   border-radius: 10px;
   display: flex;
@@ -48,21 +54,55 @@
   justify-content: center;
   color: white;
   font-weight: 700;
-  font-size: 1.125rem;
+  font-size: 1rem;
   flex-shrink: 0;
 }
 
 .logoText {
   font-weight: 700;
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
   color: var(--text-primary);
   white-space: nowrap;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.adminSidebar.closed .logoText {
+  opacity: 0;
+  width: 0;
+}
+
+/* ── Toggle button inside sidebar header ── */
+.sidebarToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.sidebarToggle:hover {
+  background: var(--primary-bg);
+  color: var(--primary-color);
+}
+
+/* When closed, center the toggle */
+.adminSidebar.closed .sidebarToggle {
+  margin: 0 auto;
 }
 
 .sidebarNav {
   flex: 1;
-  padding: 1rem 0.5rem;
+  padding: 0.75rem 0.5rem;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .navItem {
@@ -70,16 +110,17 @@
   align-items: center;
   gap: 0.75rem;
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.7rem 1rem;
   border: none;
   background: none;
   color: var(--text-secondary);
   font-size: 0.9375rem;
   cursor: pointer;
   border-radius: 10px;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
   transition: all 0.2s ease;
   white-space: nowrap;
+  overflow: hidden;
 }
 
 .navItem:hover {
@@ -97,8 +138,43 @@
   flex-shrink: 0;
 }
 
+.navLabel {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.adminSidebar.closed .navLabel {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Tooltip for collapsed sidebar */
+.adminSidebar.closed .navItem {
+  justify-content: center;
+  padding: 0.7rem;
+  position: relative;
+}
+
+.adminSidebar.closed .navItem:hover::after {
+  content: attr(data-label);
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--text-primary);
+  color: var(--bg-primary, #fff);
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  z-index: 200;
+  pointer-events: none;
+}
+
 .sidebarFooter {
-  padding: 1rem 0.5rem;
+  padding: 0.75rem 0.5rem;
   border-top: 1px solid var(--border-color);
 }
 
@@ -110,9 +186,11 @@
   transition: margin-left 0.3s ease;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
-.adminSidebar.closed + .adminMain {
+.adminSidebar.closed ~ .adminMain,
+.mainShifted {
   margin-left: 70px;
 }
 
@@ -128,8 +206,11 @@
   z-index: 50;
 }
 
+/* Mobile hamburger — hidden on desktop */
 .menuToggle {
   display: none;
+  align-items: center;
+  justify-content: center;
   padding: 0.5rem;
   border: none;
   background: none;
@@ -137,6 +218,7 @@
   cursor: pointer;
   border-radius: 8px;
   transition: background-color 0.2s;
+  flex-shrink: 0;
 }
 
 .menuToggle:hover {
@@ -326,43 +408,35 @@
   background-color: var(--primary-bg);
   color: var(--primary-color);
 }
-
 .badgeContacted {
   background-color: #fff3cd;
   color: #856404;
 }
-
 .badgeQualified {
   background-color: #d1ecf1;
   color: #0c5460;
 }
-
 .badgeWon {
   background-color: #d4edda;
   color: #155724;
 }
-
 .badgeLost {
   background-color: #f8d7da;
   color: #721c24;
 }
 
-/* Dark mode badge adjustments */
 :global([data-theme="dark"]) .badgeContacted {
   background-color: #5a4a1a;
   color: #ffc107;
 }
-
 :global([data-theme="dark"]) .badgeQualified {
   background-color: #1a3d4a;
   color: #17a2b8;
 }
-
 :global([data-theme="dark"]) .badgeWon {
   background-color: #1a3d2a;
   color: #28a745;
 }
-
 :global([data-theme="dark"]) .badgeLost {
   background-color: #4a1a1a;
   color: #dc3545;
@@ -466,19 +540,27 @@
 }
 
 @media (max-width: 768px) {
+  /* On mobile the sidebar slides in/out over content */
   .adminSidebar {
     transform: translateX(-100%);
-    position: fixed;
+    width: 260px !important; /* always full width when open on mobile */
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
   }
 
   .adminSidebar.open {
     transform: translateX(0);
   }
 
+  /* Hide the in-sidebar toggle on mobile — use header hamburger instead */
+  .sidebarToggle {
+    display: none;
+  }
+
   .adminMain {
     margin-left: 0 !important;
   }
 
+  /* Show hamburger in header on mobile */
   .menuToggle {
     display: flex;
   }
@@ -518,11 +600,11 @@
   }
 }
 
-/* ==================== SCROLLBAR STYLING ==================== */
+/* ==================== SCROLLBAR ==================== */
 
 .adminSidebar::-webkit-scrollbar,
 .sidebarNav::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 .adminSidebar::-webkit-scrollbar-track,

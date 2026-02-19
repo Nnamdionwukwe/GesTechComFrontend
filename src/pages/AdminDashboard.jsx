@@ -8,7 +8,6 @@ import {
   Users,
   FileText,
   Mail,
-  Settings,
   Sun,
   Moon,
   LogOut,
@@ -19,6 +18,8 @@ import {
   UserPlus,
   Eye,
   CreditCard,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import styles from "./AdminDashboard.module.css";
 import PaymentsManagement from "./PaymentsManagement";
@@ -39,8 +40,22 @@ const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Load theme preference
+  // Detect mobile
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // On mobile, sidebar closed by default
+  useEffect(() => {
+    if (isMobile) setSidebarOpen(false);
+  }, [isMobile]);
+
+  // Theme
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
@@ -49,7 +64,7 @@ const AdminDashboard = () => {
     }
   }, []);
 
-  // Fetch dashboard stats
+  // Stats
   useEffect(() => {
     fetchDashboardStats();
   }, []);
@@ -58,14 +73,10 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(`${API_URL}/api/admin/dashboard/stats`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
-      if (data.success) {
-        setStats(data.stats);
-      }
+      if (data.success) setStats(data.stats);
     } catch (error) {
       console.error("Failed to fetch stats:", error);
     } finally {
@@ -74,12 +85,12 @@ const AdminDashboard = () => {
   };
 
   const toggleTheme = () => {
-    const newTheme = !darkMode;
-    setDarkMode(newTheme);
-    localStorage.setItem("theme", newTheme ? "dark" : "light");
+    const next = !darkMode;
+    setDarkMode(next);
+    localStorage.setItem("theme", next ? "dark" : "light");
     document.documentElement.setAttribute(
       "data-theme",
-      newTheme ? "dark" : "light",
+      next ? "dark" : "light",
     );
   };
 
@@ -87,6 +98,12 @@ const AdminDashboard = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     window.location.href = "/login";
+  };
+
+  const handleNavClick = (id) => {
+    setActiveTab(id);
+    // Close sidebar on mobile after navigation
+    if (isMobile) setSidebarOpen(false);
   };
 
   const menuItems = [
@@ -104,63 +121,100 @@ const AdminDashboard = () => {
 
   return (
     <div className={styles.adminContainer}>
-      {/* Sidebar */}
+      {/* ── Sidebar ── */}
       <aside
         className={`${styles.adminSidebar} ${sidebarOpen ? styles.open : styles.closed}`}
       >
+        {/* Sidebar header with logo + collapse toggle */}
         <div className={styles.sidebarHeader}>
           <div className={styles.logo}>
             <div className={styles.logoIcon}>GT</div>
-            {sidebarOpen && (
-              <span className={styles.logoText}>GesTech Admin</span>
-            )}
+            <span className={styles.logoText}>GesTech Admin</span>
           </div>
-        </div>
 
-        <nav className={styles.sidebarNav}>
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.id}
-                className={`${styles.navItem} ${activeTab === item.id ? styles.active : ""}`}
-                onClick={() => setActiveTab(item.id)}
-              >
-                <Icon size={20} />
-                {sidebarOpen && <span>{item.label}</span>}
-              </button>
-            );
-          })}
-        </nav>
-
-        <div className={styles.sidebarFooter}>
-          <button className={styles.navItem} onClick={toggleTheme}>
-            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-            {sidebarOpen && (
-              <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
+          {/* Desktop collapse toggle lives inside the sidebar */}
+          <button
+            className={styles.sidebarToggle}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+          >
+            {sidebarOpen ? (
+              <ChevronLeft size={18} />
+            ) : (
+              <ChevronRight size={18} />
             )}
           </button>
-          <button className={styles.navItem} onClick={handleLogout}>
+        </div>
+
+        {/* Nav */}
+        <nav className={styles.sidebarNav}>
+          {menuItems.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              data-label={label}
+              className={`${styles.navItem} ${activeTab === id ? styles.active : ""}`}
+              onClick={() => handleNavClick(id)}
+            >
+              <Icon size={20} />
+              <span className={styles.navLabel}>{label}</span>
+            </button>
+          ))}
+        </nav>
+
+        {/* Footer */}
+        <div className={styles.sidebarFooter}>
+          <button
+            className={styles.navItem}
+            data-label={darkMode ? "Light Mode" : "Dark Mode"}
+            onClick={toggleTheme}
+          >
+            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            <span className={styles.navLabel}>
+              {darkMode ? "Light Mode" : "Dark Mode"}
+            </span>
+          </button>
+          <button
+            className={styles.navItem}
+            data-label="Logout"
+            onClick={handleLogout}
+          >
             <LogOut size={20} />
-            {sidebarOpen && <span>Logout</span>}
+            <span className={styles.navLabel}>Logout</span>
           </button>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className={styles.adminMain}>
+      {/* Mobile overlay — tap to close */}
+      {isMobile && sidebarOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 99,
+            background: "rgba(0,0,0,0.4)",
+            backdropFilter: "blur(2px)",
+          }}
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* ── Main ── */}
+      <main
+        className={styles.adminMain}
+        style={{ marginLeft: isMobile ? 0 : sidebarOpen ? "260px" : "70px" }}
+      >
         {/* Header */}
         <header className={styles.adminHeader}>
+          {/* Mobile hamburger */}
           <button
             className={styles.menuToggle}
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
-            {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+            {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
 
           <h1 className={styles.pageTitle}>
-            {menuItems.find((item) => item.id === activeTab)?.label ||
-              "Dashboard"}
+            {menuItems.find((m) => m.id === activeTab)?.label || "Dashboard"}
           </h1>
 
           <div className={styles.headerActions}>
@@ -190,15 +244,12 @@ const AdminDashboard = () => {
   );
 };
 
-// Dashboard Stats Component
+/* ── Dashboard Stats ── */
 const DashboardStats = ({ stats, loading }) => {
-  if (loading) {
+  if (loading)
     return <div className={styles.loading}>Loading dashboard...</div>;
-  }
-
-  if (!stats) {
+  if (!stats)
     return <div className={styles.error}>Failed to load dashboard stats</div>;
-  }
 
   const statCards = [
     {
@@ -233,12 +284,11 @@ const DashboardStats = ({ stats, loading }) => {
 
   return (
     <div className={styles.dashboardStats}>
-      {/* Stat Cards */}
       <div className={styles.statGrid}>
-        {statCards.map((stat, index) => {
+        {statCards.map((stat, i) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className={styles.statCard}>
+            <div key={i} className={styles.statCard}>
               <div
                 className={styles.statIcon}
                 style={{ backgroundColor: `${stat.color}20` }}
@@ -257,16 +307,14 @@ const DashboardStats = ({ stats, loading }) => {
         })}
       </div>
 
-      {/* Recent Activity */}
       <div className={styles.dashboardGrid}>
         <div className={styles.dashboardCard}>
           <h3 className={styles.cardTitle}>
-            <Activity size={20} />
-            Recent Leads
+            <Activity size={20} /> Recent Leads
           </h3>
           <div className={styles.leadList}>
-            {stats.leads?.recent?.slice(0, 5).map((lead, index) => (
-              <div key={index} className={styles.leadItem}>
+            {stats.leads?.recent?.slice(0, 5).map((lead, i) => (
+              <div key={i} className={styles.leadItem}>
                 <div className={styles.leadInfo}>
                   <div className={styles.leadName}>{lead.full_name}</div>
                   <div className={styles.leadEmail}>{lead.email}</div>
@@ -283,12 +331,11 @@ const DashboardStats = ({ stats, loading }) => {
 
         <div className={styles.dashboardCard}>
           <h3 className={styles.cardTitle}>
-            <Eye size={20} />
-            Leads by Status
+            <Eye size={20} /> Leads by Status
           </h3>
           <div className={styles.statusList}>
-            {stats.leads?.byStatus?.map((item, index) => (
-              <div key={index} className={styles.statusItem}>
+            {stats.leads?.byStatus?.map((item, i) => (
+              <div key={i} className={styles.statusItem}>
                 <div className={styles.statusInfo}>
                   <span className={styles.statusLabel}>{item.status}</span>
                   <span className={styles.statusCount}>{item.count}</span>
@@ -307,7 +354,6 @@ const DashboardStats = ({ stats, loading }) => {
         </div>
       </div>
 
-      {/* Quick Stats */}
       <div className={styles.quickStats}>
         <div className={styles.quickStat}>
           <div className={styles.quickStatLabel}>Blog Posts</div>
