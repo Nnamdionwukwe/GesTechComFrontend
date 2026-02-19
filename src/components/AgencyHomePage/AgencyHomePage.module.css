@@ -4,6 +4,7 @@
   min-height: 100vh;
   background: var(--bg-primary);
   color: var(--text-primary);
+  margin-bottom: 10px;
 }
 
 /* ==================== HERO SECTION ==================== */
