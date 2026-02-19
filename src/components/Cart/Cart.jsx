@@ -12,7 +12,6 @@ import {
   ChevronRight,
   X,
 } from "lucide-react";
-useToast;
 import styles from "./Cart.module.css";
 import { useToast } from "../Toast/Toastcontainer";
 

@@ -46,8 +46,8 @@ const ServiceVariantsModal = ({ service, isOpen, onClose, onAddToCart }) => {
           onAddToCart(data.data);
         }
 
-        // Show success toast
-        toast.success(`${variant.name} added to cart successfully!`);
+        // Show success toast!
+        toast.success(`${variant.name} added to cart successfully`);
         onClose();
       } else {
         const errorMessage =
