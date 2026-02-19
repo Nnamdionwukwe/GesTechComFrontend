@@ -21,6 +21,7 @@ import Orders from "./components/Orders/Orders";
 import OrderDetails from "./components/Orders/Orderdetails";
 import { ToastProvider } from "./components/Toast/Toastcontainer";
 import PaymentVerify from "./pages/PaymentVerify/PaymentVerify";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
         <Navigation />
         <Routes>
           <Route path="/" element={<AgencyHomePage />} />
+          <Route path="/login" element={<AdminLogin />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment/verify" element={<PaymentVerify />} />
@@ -36,7 +39,6 @@ function App() {
           <Route path="/order/:id" element={<OrderConfirmation />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/orders/:id" element={<OrderDetails />} />
-          <Route path="/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route
             path="/services/custom-software-development"
