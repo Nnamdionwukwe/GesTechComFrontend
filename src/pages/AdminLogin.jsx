@@ -70,7 +70,7 @@ const AdminLogin = () => {
       <div className={styles.loginCard}>
         <div className={styles.loginHeader}>
           <div className={styles.loginLogo}>
-            <div className={styles.loginLogoIcon}>GT</div>
+            <div className={styles.loginLogoIcon}>GTC</div>
           </div>
           <h1 className={styles.loginTitle}>Admin Login</h1>
           <p className={styles.loginSubtitle}>
@@ -124,6 +124,14 @@ const AdminLogin = () => {
             disabled={loading}
           >
             {loading ? "Signing in..." : "Sign In"}
+          </button>
+          <button
+            type="submit"
+            className={styles.loginButton}
+            disabled={loading}
+            to="/register"
+          >
+            {loading ? "Signing up..." : "Register"}
           </button>
         </form>
 

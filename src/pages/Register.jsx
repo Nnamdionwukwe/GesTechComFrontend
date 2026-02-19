@@ -166,7 +166,7 @@ const Register = () => {
         {/* Header */}
         <div className={styles.header}>
           <Link to="/" className={styles.logo}>
-            <div className={styles.logoMark}>GT</div>
+            <div className={styles.logoMark}>GTC</div>
           </Link>
           <h1 className={styles.title}>Create your account</h1>
           <p className={styles.subtitle}>
