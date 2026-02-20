@@ -551,7 +551,7 @@ const Checkout = () => {
                       )}
 
                       {/* Bank Transfer Option */}
-                      <label
+                      {/* <label
                         className={`${styles.paymentOption} ${paymentMethod === "bank_transfer" ? styles.selected : ""}`}
                       >
                         <input
@@ -576,10 +576,10 @@ const Checkout = () => {
                             </small>
                           </div>
                         </div>
-                      </label>
+                      </label> */}
 
                       {/* Bank transfer info panel */}
-                      {paymentMethod === "bank_transfer" && (
+                      {/* {paymentMethod === "bank_transfer" && (
                         <div className={styles.bankInfoPanel}>
                           <h4>Bank Account Details</h4>
                           <div className={styles.bankDetail}>
@@ -601,7 +601,7 @@ const Checkout = () => {
                             placing the order.
                           </p>
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </div>
 
