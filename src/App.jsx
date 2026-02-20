@@ -23,37 +23,33 @@ import { ToastProvider } from "./components/Toast/Toastcontainer";
 import PaymentVerify from "./pages/PaymentVerify/PaymentVerify";
 import Register from "./pages/Register";
 
-// ── Auth guard for admin routes ──────────────────────────────────────────
-const AdminRoute = ({ children }) => {
-  const token = localStorage.getItem("token");
-
-  // No token at all — send to login
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Parse stored user safely
-  let user = {};
+// Reads auth state from localStorage
+const getAuth = () => {
   try {
-    user = JSON.parse(localStorage.getItem("user") || "{}");
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    return { token, user };
   } catch {
-    // Corrupted data — clear and redirect
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    return <Navigate to="/login" replace />;
+    return { token: null, user: {} };
   }
+};
 
-  // DEBUG: uncomment these two lines if still having issues,
-  // check your browser console to see exactly what role is stored
-  // console.log("AdminRoute — token:", token?.slice(0, 20));
-  // console.log("AdminRoute — user:", user);
-
-  // Check role — accepts "admin" or "editor" (adjust as needed)
-  const allowedRoles = ["admin", "editor"];
-  if (!user?.role || !allowedRoles.includes(user.role)) {
+// Protects /admin — only admin or editor roles allowed
+const AdminRoute = ({ children }) => {
+  const { token, user } = getAuth();
+  console.log("[AdminRoute] token:", !!token, "| role:", user?.role);
+  if (!token) return <Navigate to="/login" replace />;
+  if (!["admin", "editor"].includes(user?.role))
     return <Navigate to="/login" replace />;
-  }
+  return children;
+};
 
+// Redirects already-logged-in users away from login/register
+const GuestRoute = ({ children }) => {
+  const { token, user } = getAuth();
+  if (token && ["admin", "editor"].includes(user?.role))
+    return <Navigate to="/admin" replace />;
+  if (token) return <Navigate to="/" replace />;
   return children;
 };
 
@@ -65,7 +61,6 @@ function App() {
         <Routes>
           <Route path="/" element={<AgencyHomePage />} />
 
-          {/* Protected admin route */}
           <Route
             path="/admin"
             element={
@@ -75,8 +70,22 @@ function App() {
             }
           />
 
-          <Route path="/login" element={<AdminLogin />} />
-          <Route path="/register" element={<Register />} />
+          <Route
+            path="/login"
+            element={
+              <GuestRoute>
+                <AdminLogin />
+              </GuestRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <GuestRoute>
+                <Register />
+              </GuestRoute>
+            }
+          />
 
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />

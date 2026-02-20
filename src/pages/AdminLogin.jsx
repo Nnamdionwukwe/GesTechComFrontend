@@ -62,7 +62,11 @@ const AdminLogin = () => {
       if (data.success) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-        window.location.href = "/admin";
+        // Use navigate for SPA routing — no full page reload
+        const role = data.user?.role;
+        navigate(["admin", "editor"].includes(role) ? "/admin" : "/", {
+          replace: true,
+        });
       } else {
         setError(data.error || "Login failed. Check your credentials.");
       }
