@@ -23,12 +23,37 @@ import { ToastProvider } from "./components/Toast/Toastcontainer";
 import PaymentVerify from "./pages/PaymentVerify/PaymentVerify";
 import Register from "./pages/Register";
 
-// A simple guard component
+// ── Auth guard for admin routes ──────────────────────────────────────────
 const AdminRoute = ({ children }) => {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const token = localStorage.getItem("token");
-  if (!token || user?.role !== "admin") return <Navigate to="/login" replace />;
-  if (token && user?.role === "admin") return <Navigate to="/admin" replace />;
+
+  // No token at all — send to login
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Parse stored user safely
+  let user = {};
+  try {
+    user = JSON.parse(localStorage.getItem("user") || "{}");
+  } catch {
+    // Corrupted data — clear and redirect
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    return <Navigate to="/login" replace />;
+  }
+
+  // DEBUG: uncomment these two lines if still having issues,
+  // check your browser console to see exactly what role is stored
+  // console.log("AdminRoute — token:", token?.slice(0, 20));
+  // console.log("AdminRoute — user:", user);
+
+  // Check role — accepts "admin" or "editor" (adjust as needed)
+  const allowedRoles = ["admin", "editor"];
+  if (!user?.role || !allowedRoles.includes(user.role)) {
+    return <Navigate to="/login" replace />;
+  }
+
   return children;
 };
 
@@ -40,6 +65,7 @@ function App() {
         <Routes>
           <Route path="/" element={<AgencyHomePage />} />
 
+          {/* Protected admin route */}
           <Route
             path="/admin"
             element={
@@ -48,18 +74,17 @@ function App() {
               </AdminRoute>
             }
           />
+
           <Route path="/login" element={<AdminLogin />} />
           <Route path="/register" element={<Register />} />
-          {/* <Route path="/login" element={<AdminLogin />} /> */}
-          {/* <Route path="/register" element={<Register />} /> */}
+
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment/verify" element={<PaymentVerify />} />
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
-          {/* <Route path="/order/:id" element={<OrderConfirmation />} /> */}
           <Route path="/orders" element={<Orders />} />
           <Route path="/orders/:id" element={<OrderDetails />} />
-          {/* <Route path="/admin" element={<AdminDashboard />} /> */}
+
           <Route
             path="/services/custom-software-development"
             element={<SoftwareDevelopment />}
@@ -81,6 +106,7 @@ function App() {
             path="/services/digital-marketing"
             element={<DigitalMarketing />}
           />
+
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/about" element={<About />} />
           <Route path="/blog" element={<Blog />} />

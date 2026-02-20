@@ -369,3 +369,82 @@
     font-size: 14px;
   }
 }
+
+/* ── Add these to the bottom of Navigation.module.css ── */
+
+/* Auth group — wraps dashboard + logout on desktop */
+.authGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Dashboard button */
+.dashboardBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: var(--primary-bg);
+  color: var(--primary-color);
+  border: 1.5px solid var(--primary-color);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.dashboardBtn:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Logout button — desktop nav */
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: rgba(231, 76, 60, 0.08);
+  color: #e74c3c;
+  border: 1.5px solid rgba(231, 76, 60, 0.35);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.logoutBtn:hover {
+  background: #e74c3c;
+  color: white;
+  border-color: #e74c3c;
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25);
+}
+
+/* Mobile logout button */
+.mobileLogoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(231, 76, 60, 0.06);
+  color: #e74c3c;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.mobileLogoutBtn:hover {
+  background: rgba(231, 76, 60, 0.12);
+}

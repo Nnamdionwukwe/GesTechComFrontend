@@ -1,19 +1,55 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Sun, Moon, ChevronDown } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Menu,
+  X,
+  Sun,
+  Moon,
+  ChevronDown,
+  LogOut,
+  LayoutDashboard,
+} from "lucide-react";
 import styles from "./Navigation.module.css";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [theme, setTheme] = useState("light");
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [user, setUser] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Hide nav entirely on admin pages
+  if (location.pathname.startsWith("/admin")) return null;
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
     document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
+
+  // Sync auth state on every route change
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setUser(null);
+      return;
+    }
+    try {
+      const stored = JSON.parse(localStorage.getItem("user") || "{}");
+      setUser(stored);
+    } catch {
+      setUser(null);
+    }
+  }, [location.pathname]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    setIsOpen(false);
+    navigate("/login");
+  };
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -23,7 +59,6 @@ const Navigation = () => {
   };
 
   const navItems = [
-    // { path: "/", label: "Home" },
     {
       label: "Services",
       dropdown: [
@@ -43,8 +78,6 @@ const Navigation = () => {
     { path: "/blog", label: "Blog" },
     { path: "/contact", label: "Contact" },
     { path: "/orders", label: "Orders" },
-    { path: "/login", label: "Login" },
-    // { path: "/register", label: "Register" },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -109,6 +142,26 @@ const Navigation = () => {
               {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
             </button>
 
+            {/* Auth — admin dashboard link or login */}
+            {user ? (
+              <div className={styles.authGroup}>
+                {user.role === "admin" || user.role === "editor" ? (
+                  <Link to="/admin" className={styles.dashboardBtn}>
+                    <LayoutDashboard size={16} />
+                    Dashboard
+                  </Link>
+                ) : null}
+                <button onClick={handleLogout} className={styles.logoutBtn}>
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link to="/login" className={styles.ctaButton}>
+                Login
+              </Link>
+            )}
+
             <Link to="/contact" className={styles.ctaButton}>
               Get Started
             </Link>
@@ -124,7 +177,6 @@ const Navigation = () => {
           >
             {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
           </button>
-
           <button
             onClick={() => setIsOpen(!isOpen)}
             className={styles.menuButton}
@@ -181,6 +233,46 @@ const Navigation = () => {
               )}
             </li>
           ))}
+
+          {/* Mobile auth items */}
+          {user ? (
+            <>
+              {(user.role === "admin" || user.role === "editor") && (
+                <li className={styles.mobileNavItem}>
+                  <Link
+                    to="/admin"
+                    className={styles.mobileNavLink}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <LayoutDashboard
+                      size={16}
+                      style={{ marginRight: "0.5rem" }}
+                    />
+                    Dashboard
+                  </Link>
+                </li>
+              )}
+              <li className={styles.mobileNavItem}>
+                <button
+                  className={styles.mobileLogoutBtn}
+                  onClick={handleLogout}
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </li>
+            </>
+          ) : (
+            <li className={styles.mobileNavItem}>
+              <Link
+                to="/login"
+                className={styles.mobileNavLink}
+                onClick={() => setIsOpen(false)}
+              >
+                Login
+              </Link>
+            </li>
+          )}
         </ul>
 
         <Link
