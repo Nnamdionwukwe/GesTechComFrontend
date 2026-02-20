@@ -19,9 +19,6 @@ const Navigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Hide nav entirely on admin pages
-  if (location.pathname.startsWith("/admin")) return null;
-
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
@@ -81,6 +78,9 @@ const Navigation = () => {
   ];
 
   const isActive = (path) => location.pathname === path;
+
+  // Hide nav entirely on admin pages — AFTER all hooks
+  if (location.pathname.startsWith("/admin")) return null;
 
   return (
     <nav className={styles.nav}>
