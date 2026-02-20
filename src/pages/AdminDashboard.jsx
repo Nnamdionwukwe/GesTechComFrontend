@@ -20,6 +20,7 @@ import {
   CreditCard,
   ChevronLeft,
   ChevronRight,
+  LineChart,
 } from "lucide-react";
 import styles from "./AdminDashboard.module.css";
 import PaymentsManagement from "./PaymentsManagement";
@@ -31,6 +32,7 @@ import TeamManagement from "../components/admin/TeamManagement";
 import BlogManagement from "../components/admin/BlogManagement";
 import SubscribersManagement from "../components/admin/SubscribersManagement";
 import UsersManagement from "../components/admin/UsersManagement";
+import { Link } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
@@ -128,7 +130,9 @@ const AdminDashboard = () => {
         {/* Sidebar header with logo + collapse toggle */}
         <div className={styles.sidebarHeader}>
           <div className={styles.logo}>
-            <div className={styles.logoIcon}>GT</div>
+            <Link to="/" className={styles.logoLink}>
+              <div className={styles.logoIcon}>GT</div>
+            </Link>
             <span className={styles.logoText}>GesTech Admin</span>
           </div>
 
