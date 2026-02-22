@@ -67,7 +67,8 @@ const mockPosts = [
     title: "SEO Strategies That Actually Work",
     excerpt:
       "Proven SEO techniques to boost your website rankings and drive organic traffic in 2024.",
-    image: "https://images.unsplash.com/photo-1432888622747-4eb9a8f2c2e2?w=800",
+    image:
+      "https://www.techmagnate.com/wp-content/uploads/2024/01/Effective-SEO-Strategies_-What-They-Are-9-Ways-to-Rank-Higher.webp",
     category: "marketing",
     author: "Lisa Anderson",
     authorImage: "https://randomuser.me/api/portraits/women/5.jpg",
