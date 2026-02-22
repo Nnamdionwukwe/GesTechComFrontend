@@ -20,20 +20,20 @@ import styles from "./Blog.module.css";
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
 const mockPosts = [
-  // {
-  //   id: 1,
-  //   title: "10 React Best Practices for 2026",
-  //   excerpt:
-  //     "Learn the latest best practices for building modern React applications with performance and maintainability in mind.",
-  //   image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800",
-  //   category: "development",
-  //   author: "Sarah Johnson",
-  //   authorImage: "https://randomuser.me/api/portraits/women/1.jpg",
-  //   date: "2026-02-15",
-  //   readTime: "8 min read",
-  //   tags: ["React", "JavaScript", "Best Practices"],
-  //   slug: "react-best-practices-2024",
-  // },
+  {
+    id: 1,
+    title: "10 React Best Practices for 2026",
+    excerpt:
+      "Learn the latest best practices for building modern React applications with performance and maintainability in mind.",
+    image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800",
+    category: "development",
+    author: "Sarah Johnson",
+    authorImage: "https://randomuser.me/api/portraits/women/1.jpg",
+    date: "2026-02-15",
+    readTime: "8 min read",
+    tags: ["React", "JavaScript", "Best Practices"],
+    slug: "react-best-practices-2024",
+  },
   {
     id: 2,
     title: "The Future of Mobile App Development",
