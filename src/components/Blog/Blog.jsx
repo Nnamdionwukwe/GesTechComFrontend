@@ -75,7 +75,7 @@ const mockPosts = [
     date: "2024-02-08",
     readTime: "12 min read",
     tags: ["SEO", "Marketing", "Google"],
-    slug: "https://www.techmagnate.com/blog/seo-strategies/",
+    slug: "https://www.techmagnate.com/blog/seo-strategies",
   },
   {
     id: 5,
