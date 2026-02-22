@@ -66,7 +66,7 @@ const mockPosts = [
     id: 4,
     title: "SEO Strategies That Actually Work",
     excerpt:
-      "Proven SEO techniques to boost your website rankings and drive organic traffic in 2024.",
+      "Proven SEO techniques to boost your website rankings and drive organic traffic in 2026.",
     image:
       "https://www.techmagnate.com/wp-content/uploads/2024/01/Effective-SEO-Strategies_-What-They-Are-9-Ways-to-Rank-Higher.webp",
     category: "marketing",
@@ -75,7 +75,7 @@ const mockPosts = [
     date: "2024-02-08",
     readTime: "12 min read",
     tags: ["SEO", "Marketing", "Google"],
-    slug: "seo-strategies-2024",
+    slug: "https://www.techmagnate.com/blog/seo-strategies/",
   },
   {
     id: 5,
