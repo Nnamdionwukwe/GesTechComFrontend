@@ -22,7 +22,7 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 const mockPosts = [
   {
     id: 1,
-    title: "10 React Best Practices for 2024",
+    title: "10 React Best Practices for 2026",
     excerpt:
       "Learn the latest best practices for building modern React applications with performance and maintainability in mind.",
     image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800",
