@@ -413,14 +413,14 @@ const Contact = () => {
               {/* Map Placeholder */}
               <div className={styles.mapPlaceholder}>
                 <iframe
-                  src="https://maps.google.com?q=GesTechCom,%20Patience%20Offiong%20Street,%20Abuja&ftid=0xa37089b95c8eb48f:0xb422ffe07fb8ec7&entry=gps&shh=CAE&lucs=,94286590,94297699,94284478,94231188,94280568,47071704,94218641,94282134,94286869&g_st=ic"
+                  src="https://maps.google.com/maps?q=Patience+Offiong+Street,+Mabushi,+Abuja,+Nigeria&output=embed"
                   width="100%"
                   height="300"
                   style={{ border: 0, borderRadius: "16px" }}
                   allowFullScreen=""
                   loading="lazy"
                   title="Office Location"
-                ></iframe>
+                />
               </div>
             </div>
           </div>
