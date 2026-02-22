@@ -89,7 +89,7 @@ const mockPosts = [
     date: "2024-02-05",
     readTime: "15 min read",
     tags: ["Web", "Architecture", "Scalability"],
-    slug: "scalable-web-apps",
+    slug: "https://www.techmagnate.com/blog/category/website-design/",
   },
   {
     id: 6,
