@@ -22,6 +22,7 @@ import {
   ChevronRight,
   LineChart,
   BarChart2,
+  ShoppingCart,
 } from "lucide-react";
 import styles from "./AdminDashboard.module.css";
 import PaymentsManagement from "./PaymentsManagement";
@@ -35,6 +36,7 @@ import SubscribersManagement from "../components/admin/SubscribersManagement";
 import UsersManagement from "../components/admin/UsersManagement";
 import { Link } from "react-router-dom";
 import AnalyticsManagement from "./AnalyticsManagement";
+import CartManagement from "./CartManagement";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
@@ -122,6 +124,7 @@ const AdminDashboard = () => {
     { id: "subscribers", label: "Subscribers", icon: UserPlus },
     { id: "users", label: "Users", icon: Users },
     { id: "analytics", label: "Analytics", icon: BarChart2 },
+    { id: "carts", label: "Carts", icon: ShoppingCart },
   ];
 
   return (
@@ -246,6 +249,7 @@ const AdminDashboard = () => {
           {activeTab === "leads" && <LeadsManagement />}
           {activeTab === "users" && <UsersManagement />}
           {activeTab === "analytics" && <AnalyticsManagement />}
+          {activeTab === "carts" && <CartManagement />}
         </div>
       </main>
     </div>
