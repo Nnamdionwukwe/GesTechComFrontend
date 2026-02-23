@@ -117,7 +117,7 @@ export default function AnalyticsManagement() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${API_URL}/api/admin/analytics?days=${range}`, {
+      const res = await fetch(`${API_URL}/api/analytics/admin?days=${range}`, {
         headers,
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
