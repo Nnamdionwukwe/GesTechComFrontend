@@ -1,6 +1,5 @@
 // src/components/admin/CartManagement.jsx
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
 import {
   ShoppingCart,
   Users,
@@ -79,9 +78,10 @@ export default function CartManagement() {
   const fetchStats = useCallback(async () => {
     setStatsLoading(true);
     try {
-      const { data } = await axios.get(`${API_URL}/api/cart/admin/stats`, {
+      const res = await fetch(`${API_URL}/api/cart/admin/stats`, {
         headers: authHeader,
       });
+      const data = await res.json();
       if (data.success) setStats(data.data);
     } catch (err) {
       console.error("Cart stats error:", err);
@@ -94,10 +94,15 @@ export default function CartManagement() {
   const fetchCarts = useCallback(async () => {
     setListLoading(true);
     try {
-      const { data } = await axios.get(`${API_URL}/api/cart/admin/all`, {
-        headers: authHeader,
-        params: { page, limit: 20, search },
+      const params = new URLSearchParams({
+        page,
+        limit: 20,
+        ...(search && { search }),
       });
+      const res = await fetch(`${API_URL}/api/cart/admin/all?${params}`, {
+        headers: authHeader,
+      });
+      const data = await res.json();
       if (data.success) {
         setCarts(data.data);
         setPagination(data.pagination);
@@ -122,12 +127,10 @@ export default function CartManagement() {
     setDrawerCart(null);
     setDrawerLoading(true);
     try {
-      const { data } = await axios.get(
-        `${API_URL}/api/cart/admin/user/${userId}`,
-        {
-          headers: authHeader,
-        },
-      );
+      const res = await fetch(`${API_URL}/api/cart/admin/user/${userId}`, {
+        headers: authHeader,
+      });
+      const data = await res.json();
       if (data.success) setDrawerCart(data.data);
     } catch (err) {
       showFlash("Failed to load cart details", "error");
@@ -146,12 +149,10 @@ export default function CartManagement() {
   async function confirmClear() {
     setClearing(true);
     try {
-      await axios.delete(
-        `${API_URL}/api/cart/admin/user/${clearTarget}/clear`,
-        {
-          headers: authHeader,
-        },
-      );
+      await fetch(`${API_URL}/api/cart/admin/user/${clearTarget}/clear`, {
+        method: "DELETE",
+        headers: authHeader,
+      });
       showFlash("Cart cleared successfully");
       setClearTarget(null);
       fetchCarts();
