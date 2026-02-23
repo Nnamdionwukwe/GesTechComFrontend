@@ -17,7 +17,6 @@ import {
   Clock,
 } from "lucide-react";
 import styles from "./CartManagement.module.css";
-import useAuthStore from "../../store/authStore";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
@@ -40,8 +39,10 @@ function timeAgo(dateStr) {
 }
 
 export default function CartManagement() {
-  const { accessToken } = useAuthStore();
-  const authHeader = { Authorization: `Bearer ${accessToken}` };
+  const authHeader = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
 
   // ── Stats ─────────────────────────────────────────────────────────────────
   const [stats, setStats] = useState(null);
@@ -88,7 +89,7 @@ export default function CartManagement() {
     } finally {
       setStatsLoading(false);
     }
-  }, [accessToken]);
+  }, []);
 
   // ── Fetch all carts ───────────────────────────────────────────────────────
   const fetchCarts = useCallback(async () => {
@@ -112,7 +113,7 @@ export default function CartManagement() {
     } finally {
       setListLoading(false);
     }
-  }, [accessToken, page, search]);
+  }, [page, search]);
 
   useEffect(() => {
     fetchStats();
