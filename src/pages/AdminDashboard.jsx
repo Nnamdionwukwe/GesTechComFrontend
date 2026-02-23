@@ -21,6 +21,7 @@ import {
   ChevronLeft,
   ChevronRight,
   LineChart,
+  BarChart2,
 } from "lucide-react";
 import styles from "./AdminDashboard.module.css";
 import PaymentsManagement from "./PaymentsManagement";
@@ -33,6 +34,7 @@ import BlogManagement from "../components/admin/BlogManagement";
 import SubscribersManagement from "../components/admin/SubscribersManagement";
 import UsersManagement from "../components/admin/UsersManagement";
 import { Link } from "react-router-dom";
+import AnalyticsManagement from "./AnalyticsManagement";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
@@ -119,6 +121,7 @@ const AdminDashboard = () => {
     { id: "leads", label: "Leads", icon: Mail },
     { id: "subscribers", label: "Subscribers", icon: UserPlus },
     { id: "users", label: "Users", icon: Users },
+    { id: "analytics", label: "Analytics", icon: BarChart2 },
   ];
 
   return (
@@ -242,6 +245,7 @@ const AdminDashboard = () => {
           {activeTab === "subscribers" && <SubscribersManagement />}
           {activeTab === "leads" && <LeadsManagement />}
           {activeTab === "users" && <UsersManagement />}
+          {activeTab === "analytics" && <AnalyticsManagement />}
         </div>
       </main>
     </div>

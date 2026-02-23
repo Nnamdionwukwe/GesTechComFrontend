@@ -5,6 +5,27 @@
     <link rel="icon" type="image/svg+xml" href="/IMG_0174.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GesTechCom</title>
+
+    <!-- ── Google Analytics GA4 ── -->
+    <!-- Replace G-XXXXXXXXXX with your real Measurement ID from analytics.google.com -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-XXXXXXXXXX", {
+        // Anonymize IP addresses for GDPR compliance
+        anonymize_ip: true,
+        // Send page views automatically on route changes (React SPA)
+        send_page_view: true,
+      });
+    </script>
+    <!-- ── End Google Analytics ── -->
   </head>
   <body>
     <div id="root"></div>
