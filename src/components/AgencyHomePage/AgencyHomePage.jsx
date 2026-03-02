@@ -221,7 +221,7 @@ const AgencyHomePage = () => {
           <div className={styles.heroText}>
             <span className={styles.badge}>
               <Zap size={16} />
-              <span>GTC</span>
+              {/* <span>GTC</span> */}
             </span>
             <h1 className={styles.heroTitle}>
               Transform Your Business with
