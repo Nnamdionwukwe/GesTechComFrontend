@@ -1,5 +1,5 @@
 // src/pages/Register.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   User,
@@ -15,6 +15,9 @@ import {
 import styles from "./Register.module.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+
+// ─── helpers ────────────────────────────────────────────────────────────────
 
 const getPasswordStrength = (password) => {
   if (!password) return { score: 0, label: "", color: "" };
@@ -37,9 +40,87 @@ const PasswordRule = ({ met, text }) => (
   </div>
 );
 
+// ─── save tokens (works for both login shapes) ───────────────────────────────
+//   email/password → { token, user }
+//   Google         → { tokens: { accessToken, refreshToken }, user }
+function saveAuth(data) {
+  const token = data.token || data.tokens?.accessToken;
+  const refresh = data.tokens?.refreshToken;
+  if (token) localStorage.setItem("token", token);
+  if (token) localStorage.setItem("accessToken", token);
+  if (refresh) localStorage.setItem("refreshToken", refresh);
+  if (data.user) localStorage.setItem("user", JSON.stringify(data.user));
+}
+
+// ─── Google Sign-In button ───────────────────────────────────────────────────
+function GoogleSignInButton({ onSuccess, onError }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (!GOOGLE_CLIENT_ID) return;
+
+    const init = () => {
+      if (!window.google?.accounts?.id || !containerRef.current) return;
+      window.google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleCredential,
+        auto_select: false,
+      });
+      window.google.accounts.id.renderButton(containerRef.current, {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        text: "signup_with",
+        shape: "rectangular",
+        logo_alignment: "left",
+        width: containerRef.current.offsetWidth || 340,
+      });
+    };
+
+    if (window.google?.accounts?.id) {
+      init();
+    } else {
+      const existing = document.getElementById("gsi-script");
+      if (!existing) {
+        const s = document.createElement("script");
+        s.id = "gsi-script";
+        s.src = "https://accounts.google.com/gsi/client";
+        s.async = true;
+        s.defer = true;
+        s.onload = init;
+        document.head.appendChild(s);
+      } else {
+        existing.addEventListener("load", init, { once: true });
+      }
+    }
+  }, []);
+
+  const handleCredential = async ({ credential }) => {
+    try {
+      const res = await fetch(`${API_URL}/api/auth/google/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken: credential }),
+      });
+      const data = await res.json();
+      if (data.success) onSuccess(data);
+      else onError(data.error || "Google sign-in failed");
+    } catch {
+      onError("Connection error during Google sign-in");
+    }
+  };
+
+  if (!GOOGLE_CLIENT_ID) return null;
+
+  return <div ref={containerRef} className={styles.googleBtn} />;
+}
+
+// ─── Register ────────────────────────────────────────────────────────────────
 const Register = () => {
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
+  const [googleBusy, setGoogleBusy] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -52,7 +133,7 @@ const Register = () => {
   });
   const [touched, setTouched] = useState({});
 
-  // Redirect if already logged in — skip register page
+  // Redirect if already logged in
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -65,7 +146,6 @@ const Register = () => {
   }, [navigate]);
 
   const strength = getPasswordStrength(form.password);
-
   const rules = [
     { met: form.password.length >= 8, text: "At least 8 characters" },
     { met: /[A-Z]/.test(form.password), text: "One uppercase letter" },
@@ -76,7 +156,6 @@ const Register = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
     setError("");
   };
-
   const handleBlur = (e) => setTouched({ ...touched, [e.target.name]: true });
 
   const validate = () => {
@@ -94,6 +173,7 @@ const Register = () => {
     return null;
   };
 
+  // Email/password submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setTouched({
@@ -102,17 +182,16 @@ const Register = () => {
       password: true,
       confirm_password: true,
     });
-    const validationError = validate();
-    if (validationError) {
-      setError(validationError);
+    const err = validate();
+    if (err) {
+      setError(err);
       return;
     }
 
     setLoading(true);
     setError("");
-
     try {
-      const response = await fetch(`${API_URL}/api/auth/register`, {
+      const res = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -121,19 +200,17 @@ const Register = () => {
           password: form.password,
         }),
       });
-
-      const data = await response.json();
-
+      const data = await res.json();
       if (data.success) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        saveAuth(data);
         setSubmitted(true);
-        // Role-aware redirect after success
-        setTimeout(() => {
-          navigate(data.user?.role === "admin" ? "/admin" : "/", {
-            replace: true,
-          });
-        }, 1500);
+        setTimeout(
+          () =>
+            navigate(data.user?.role === "admin" ? "/admin" : "/", {
+              replace: true,
+            }),
+          1500,
+        );
       } else {
         setError(data.error || "Registration failed. Please try again.");
       }
@@ -142,6 +219,13 @@ const Register = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Google callback
+  const handleGoogleSuccess = (data) => {
+    setGoogleBusy(true);
+    saveAuth(data);
+    navigate(data.user?.role === "admin" ? "/admin" : "/", { replace: true });
   };
 
   if (submitted) {
@@ -162,6 +246,7 @@ const Register = () => {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
+        {/* ── Header ── */}
         <div className={styles.header}>
           <Link to="/" className={styles.logo}>
             <div className={styles.logoMark}>GTC</div>
@@ -172,6 +257,7 @@ const Register = () => {
           </p>
         </div>
 
+        {/* ── Error banner ── */}
         {error && (
           <div className={styles.errorBanner}>
             <XCircle size={16} />
@@ -179,6 +265,31 @@ const Register = () => {
           </div>
         )}
 
+        {/* ── Google Sign-In ── */}
+        <div className={styles.socialSection}>
+          {googleBusy ? (
+            <div className={styles.googleLoading}>
+              <span className={styles.spinner} />
+              Signing you in…
+            </div>
+          ) : (
+            <GoogleSignInButton
+              onSuccess={handleGoogleSuccess}
+              onError={(msg) => setError(msg)}
+            />
+          )}
+        </div>
+
+        {/* ── Divider ── */}
+        {GOOGLE_CLIENT_ID && (
+          <div className={styles.divider}>
+            <span className={styles.dividerLine} />
+            <span className={styles.dividerText}>or register with email</span>
+            <span className={styles.dividerLine} />
+          </div>
+        )}
+
+        {/* ── Email / password form ── */}
         <form onSubmit={handleSubmit} className={styles.form} noValidate>
           {/* Full Name */}
           <div
@@ -336,9 +447,7 @@ const Register = () => {
               <span className={styles.spinner} />
             ) : (
               <>
-                <Sparkles size={18} />
-                Create Account
-                <ArrowRight size={18} />
+                <Sparkles size={18} /> Create Account <ArrowRight size={18} />
               </>
             )}
           </button>
