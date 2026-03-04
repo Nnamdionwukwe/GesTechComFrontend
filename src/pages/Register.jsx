@@ -407,7 +407,9 @@ const Register = () => {
             {touched.confirm_password &&
               form.confirm_password &&
               form.password !== form.confirm_password && (
-                <span className={styles.fieldMsg}>Passwords do not match</span>
+                <span className={styles.fieldMsg}>
+                  Passwords do not match try again
+                </span>
               )}
             {touched.confirm_password &&
               form.confirm_password &&
