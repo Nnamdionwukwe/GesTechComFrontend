@@ -243,7 +243,7 @@ const Register = () => {
 
   return (
     <div className={styles.page}>
-      {/* <div className={styles.card}>
+      <div className={styles.card}>
         <div className={styles.header}>
           <Link to="/" className={styles.logo}>
             <div className={styles.logoMark}>GTC</div>
@@ -451,7 +451,7 @@ const Register = () => {
             </Link>
           </p>
         </div>
-      </div> */}
+      </div>
       <Blobs />
     </div>
   );
