@@ -39,7 +39,7 @@
 /* ── Header ── */
 .header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .logo {
@@ -87,7 +87,7 @@
   border-radius: 12px;
   color: #e74c3c;
   font-size: 0.9rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   animation: shake 0.3s ease;
 }
 
@@ -102,6 +102,57 @@
   75% {
     transform: translateX(6px);
   }
+}
+
+/* ── Google Sign-In ── */
+.socialSection {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+/* The div the GSI SDK renders into — must fill full width */
+.googleBtn {
+  width: 100%;
+}
+
+/* Shown while Google auth is in-flight */
+.googleLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 44px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  background: var(--input-bg);
+}
+
+/* ── Divider ── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 1rem;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.dividerText {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 /* ── Form ── */
