@@ -53,8 +53,11 @@ function GoogleSignInButton({ onSuccess, onError }) {
   // useRef keeps a stable reference so useEffect closure is always current
   const onSuccessRef = useRef(onSuccess);
   const onErrorRef = useRef(onError);
-  onSuccessRef.current = onSuccess;
-  onErrorRef.current = onError;
+
+  useEffect(() => {
+    onSuccessRef.current = onSuccess;
+    onErrorRef.current = onError;
+  }, [onSuccess, onError]);
 
   useEffect(() => {
     if (!GOOGLE_CLIENT_ID) return;
