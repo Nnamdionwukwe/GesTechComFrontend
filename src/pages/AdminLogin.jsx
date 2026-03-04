@@ -7,7 +7,6 @@ import styles from "./AdminLogin.module.css";
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
 
-// ── Save tokens — handles both { token } and { tokens: { accessToken } } ──────
 function saveAuth(data) {
   const token = data.token || data.tokens?.accessToken;
   const refresh = data.tokens?.refreshToken;
@@ -17,12 +16,32 @@ function saveAuth(data) {
   if (data.user) localStorage.setItem("user", JSON.stringify(data.user));
 }
 
-// ── Google Sign-In button (same pattern as Register.jsx) ─────────────────────
+// ── Google Sign-In button ─────────────────────────────────────────────────────
 function GoogleSignInButton({ onSuccess, onError }) {
   const containerRef = useRef(null);
+  const onSuccessRef = useRef(onSuccess);
+  const onErrorRef = useRef(onError);
+  onSuccessRef.current = onSuccess;
+  onErrorRef.current = onError;
 
   useEffect(() => {
     if (!GOOGLE_CLIENT_ID) return;
+
+    // handleCredential defined inside useEffect — no hoisting/ordering issue
+    const handleCredential = async ({ credential }) => {
+      try {
+        const res = await fetch(`${API_URL}/api/auth/google/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idToken: credential }),
+        });
+        const data = await res.json();
+        if (data.success) onSuccessRef.current(data);
+        else onErrorRef.current(data.error || "Google sign-in failed");
+      } catch {
+        onErrorRef.current("Connection error during Google sign-in");
+      }
+    };
 
     const init = () => {
       if (!window.google?.accounts?.id || !containerRef.current) return;
@@ -60,21 +79,6 @@ function GoogleSignInButton({ onSuccess, onError }) {
     }
   }, []);
 
-  const handleCredential = async ({ credential }) => {
-    try {
-      const res = await fetch(`${API_URL}/api/auth/google/verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken: credential }),
-      });
-      const data = await res.json();
-      if (data.success) onSuccess(data);
-      else onError(data.error || "Google sign-in failed");
-    } catch {
-      onError("Connection error during Google sign-in");
-    }
-  };
-
   if (!GOOGLE_CLIENT_ID) return null;
   return <div ref={containerRef} className={styles.googleBtn} />;
 }
@@ -98,7 +102,6 @@ const AdminLogin = () => {
     }
   }, []);
 
-  // Redirect if already logged in
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -120,7 +123,6 @@ const AdminLogin = () => {
     );
   };
 
-  // Email / password submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -148,7 +150,6 @@ const AdminLogin = () => {
     }
   };
 
-  // Google callback
   const handleGoogleSuccess = (data) => {
     setGoogleBusy(true);
     saveAuth(data);
@@ -160,7 +161,6 @@ const AdminLogin = () => {
 
   return (
     <div className={styles.loginContainer}>
-      {/* Theme toggle */}
       <button
         className={styles.themeToggleBtn}
         onClick={toggleTheme}
@@ -170,7 +170,6 @@ const AdminLogin = () => {
       </button>
 
       <div className={styles.loginCard}>
-        {/* Header */}
         <div className={styles.loginHeader}>
           <div className={styles.loginLogo}>
             <div className={styles.loginLogoIcon}>GTC</div>
@@ -181,10 +180,8 @@ const AdminLogin = () => {
           </p>
         </div>
 
-        {/* Error */}
         {error && <div className={styles.errorMessage}>{error}</div>}
 
-        {/* Google Sign-In */}
         {GOOGLE_CLIENT_ID && (
           <>
             <div className={styles.socialSection}>
@@ -199,7 +196,6 @@ const AdminLogin = () => {
                 />
               )}
             </div>
-
             <div className={styles.divider}>
               <span className={styles.dividerLine} />
               <span className={styles.dividerText}>or sign in with email</span>
@@ -208,7 +204,6 @@ const AdminLogin = () => {
           </>
         )}
 
-        {/* Email / password form */}
         <form onSubmit={handleSubmit} className={styles.loginForm}>
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Email</label>
@@ -259,7 +254,6 @@ const AdminLogin = () => {
           </button>
         </form>
 
-        {/* Footer */}
         <div className={styles.loginFooter}>
           <p className={styles.footerText}>
             Don't have an account?{" "}
@@ -270,7 +264,6 @@ const AdminLogin = () => {
         </div>
       </div>
 
-      {/* Background shapes */}
       <div className={styles.loginBackground}>
         <div className={`${styles.backgroundShape} ${styles.shape1}`} />
         <div className={`${styles.backgroundShape} ${styles.shape2}`} />

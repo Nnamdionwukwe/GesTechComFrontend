@@ -17,8 +17,6 @@ import styles from "./Register.module.css";
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
 
-// ─── helpers ────────────────────────────────────────────────────────────────
-
 const getPasswordStrength = (password) => {
   if (!password) return { score: 0, label: "", color: "" };
   let score = 0;
@@ -40,9 +38,6 @@ const PasswordRule = ({ met, text }) => (
   </div>
 );
 
-// ─── save tokens (works for both login shapes) ───────────────────────────────
-//   email/password → { token, user }
-//   Google         → { tokens: { accessToken, refreshToken }, user }
 function saveAuth(data) {
   const token = data.token || data.tokens?.accessToken;
   const refresh = data.tokens?.refreshToken;
@@ -52,12 +47,33 @@ function saveAuth(data) {
   if (data.user) localStorage.setItem("user", JSON.stringify(data.user));
 }
 
-// ─── Google Sign-In button ───────────────────────────────────────────────────
+// ── Google Sign-In button ─────────────────────────────────────────────────────
 function GoogleSignInButton({ onSuccess, onError }) {
   const containerRef = useRef(null);
+  // useRef keeps a stable reference so useEffect closure is always current
+  const onSuccessRef = useRef(onSuccess);
+  const onErrorRef = useRef(onError);
+  onSuccessRef.current = onSuccess;
+  onErrorRef.current = onError;
 
   useEffect(() => {
     if (!GOOGLE_CLIENT_ID) return;
+
+    // Defined inside useEffect — no ordering issue
+    const handleCredential = async ({ credential }) => {
+      try {
+        const res = await fetch(`${API_URL}/api/auth/google/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idToken: credential }),
+        });
+        const data = await res.json();
+        if (data.success) onSuccessRef.current(data);
+        else onErrorRef.current(data.error || "Google sign-in failed");
+      } catch {
+        onErrorRef.current("Connection error during Google sign-in");
+      }
+    };
 
     const init = () => {
       if (!window.google?.accounts?.id || !containerRef.current) return;
@@ -95,30 +111,13 @@ function GoogleSignInButton({ onSuccess, onError }) {
     }
   }, []);
 
-  const handleCredential = async ({ credential }) => {
-    try {
-      const res = await fetch(`${API_URL}/api/auth/google/verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken: credential }),
-      });
-      const data = await res.json();
-      if (data.success) onSuccess(data);
-      else onError(data.error || "Google sign-in failed");
-    } catch {
-      onError("Connection error during Google sign-in");
-    }
-  };
-
   if (!GOOGLE_CLIENT_ID) return null;
-
   return <div ref={containerRef} className={styles.googleBtn} />;
 }
 
-// ─── Register ────────────────────────────────────────────────────────────────
+// ── Register ──────────────────────────────────────────────────────────────────
 const Register = () => {
   const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
   const [googleBusy, setGoogleBusy] = useState(false);
   const [error, setError] = useState("");
@@ -133,7 +132,6 @@ const Register = () => {
   });
   const [touched, setTouched] = useState({});
 
-  // Redirect if already logged in
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -173,7 +171,6 @@ const Register = () => {
     return null;
   };
 
-  // Email/password submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setTouched({
@@ -187,7 +184,6 @@ const Register = () => {
       setError(err);
       return;
     }
-
     setLoading(true);
     setError("");
     try {
@@ -221,7 +217,6 @@ const Register = () => {
     }
   };
 
-  // Google callback
   const handleGoogleSuccess = (data) => {
     setGoogleBusy(true);
     saveAuth(data);
@@ -246,7 +241,6 @@ const Register = () => {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        {/* ── Header ── */}
         <div className={styles.header}>
           <Link to="/" className={styles.logo}>
             <div className={styles.logoMark}>GTC</div>
@@ -257,7 +251,6 @@ const Register = () => {
           </p>
         </div>
 
-        {/* ── Error banner ── */}
         {error && (
           <div className={styles.errorBanner}>
             <XCircle size={16} />
@@ -265,12 +258,10 @@ const Register = () => {
           </div>
         )}
 
-        {/* ── Google Sign-In ── */}
         <div className={styles.socialSection}>
           {googleBusy ? (
             <div className={styles.googleLoading}>
-              <span className={styles.spinner} />
-              Signing you in…
+              <span className={styles.spinner} /> Signing you in…
             </div>
           ) : (
             <GoogleSignInButton
@@ -280,7 +271,6 @@ const Register = () => {
           )}
         </div>
 
-        {/* ── Divider ── */}
         {GOOGLE_CLIENT_ID && (
           <div className={styles.divider}>
             <span className={styles.dividerLine} />
@@ -289,9 +279,7 @@ const Register = () => {
           </div>
         )}
 
-        {/* ── Email / password form ── */}
         <form onSubmit={handleSubmit} className={styles.form} noValidate>
-          {/* Full Name */}
           <div
             className={`${styles.field} ${touched.full_name && !form.full_name ? styles.fieldError : ""}`}
           >
@@ -314,7 +302,6 @@ const Register = () => {
             )}
           </div>
 
-          {/* Email */}
           <div
             className={`${styles.field} ${touched.email && form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) ? styles.fieldError : ""}`}
           >
@@ -334,7 +321,6 @@ const Register = () => {
             </div>
           </div>
 
-          {/* Password */}
           <div className={styles.field}>
             <label className={styles.label}>Password</label>
             <div className={styles.inputWrap}>
@@ -390,7 +376,6 @@ const Register = () => {
             )}
           </div>
 
-          {/* Confirm Password */}
           <div
             className={`${styles.field} ${touched.confirm_password && form.confirm_password && form.password !== form.confirm_password ? styles.fieldError : ""}`}
           >
